@@ -7,6 +7,7 @@ import Fieldset from './form-fieldset.svelte';
 import Legend from './form-legend.svelte';
 import ElementField from './form-element-field.svelte';
 import Button from './form-button.svelte';
+import Form from './form.svelte';
 
 const Control = FormPrimitive.Control;
 
@@ -29,5 +30,6 @@ export {
 	Fieldset as FormFieldset,
 	Legend as FormLegend,
 	ElementField as FormElementField,
-	Button as FormButton
+	Button as FormButton,
+	Form as FormForm
 };
