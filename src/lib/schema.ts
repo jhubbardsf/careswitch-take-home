@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const User = z.object({
 	name: z.string(),
-	email: z.string().email().nullable(),
+	email: z.string().email(),
 	workspaces: z.array(
 		z.object({
 			id: z.number().int().positive(),
@@ -21,7 +21,7 @@ const Workspace = z.object({
 		z.object({
 			id: z.number().int().positive(),
 			name: z.string(),
-			email: z.string().email().nullable(),
+			email: z.string().email(),
 			createdAt: z.date(),
 			updatedAt: z.date()
 		})
