@@ -1,12 +1,12 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import SettingsForm from './create-form.svelte';
+	import CreateForm from '$lib/components/forms/create-form-user.svelte';
 
 	const { data } = $props();
 </script>
 
 <div class="flex h-screen items-center justify-center">
 	<Card.Root class="w-[380px] p-4">
-		<SettingsForm data={data.form} />
+		<CreateForm data={data.form} />
 	</Card.Root>
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 
@@ -21,7 +22,7 @@
 			</div>
 		</Card.Content>
 		<Card.Footer>
-			<Button class="w-full" href={`/users/create`}>Edit</Button>
+			<Button class="w-full" href={`/users/edit/${$page.params.id}`}>Edit</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>

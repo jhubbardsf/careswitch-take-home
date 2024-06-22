@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import EditForm from '../../create/create-form.svelte';
+	import EditForm from '$lib/components/forms/create-form-user.svelte';
 
 	const { data } = $props();
 </script>

@@ -3,6 +3,8 @@ import { superValidate, message, fail, setError } from 'sveltekit-superforms';
 import { schemas } from '$lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { prisma } from '$lib/server/db.js';
+import { redirect } from '@sveltejs/kit';
+// import { redirect } from 'sveltekit-flash-message/server';
 
 export const load: PageServerLoad = async ({ params: { id } }) => {
 	const user = await prisma.user.findFirst({ where: { id: Number(id) } });
@@ -16,7 +18,8 @@ export const load: PageServerLoad = async ({ params: { id } }) => {
 
 export const actions: Actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(schemas.User));
+		let { cookies } = event;
+		let form = await superValidate(event, zod(schemas.User));
 		if (!form.valid) {
 			console.log('Form is invalid', { form });
 			return fail(400, {
@@ -35,11 +38,14 @@ export const actions: Actions = {
 					email: form.data.email
 				}
 			});
+
+			// redirect('/', { type: 'success', message: "That's the entrepreneur spirit!" }, cookies);
+
+			return message(form, 'User updated successfully');
+			// redirect(200, `/users/view/${updateUser.id}`);
 		} catch (error) {
 			console.error({ error, 'error.message': (error as any).message });
 			return setError(form, 'email', 'E-mail already exists.');
 		}
-
-		return message(form, 'User updated successfully');
 	}
 };

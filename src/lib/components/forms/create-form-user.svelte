@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
@@ -8,22 +9,22 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { z } from 'zod';
 
-	export let data: SuperValidated<z.infer<typeof schemas.User>>;
+	type Data = SuperValidated<z.infer<typeof schemas.User>>;
+	let { data }: Data = $props();
 
-	const form = superForm(data, {
+	let form = superForm(data, {
 		validators: zodClient(schemas.User),
-		dataType: 'json'
+		dataType: 'json',
+		invalidateAll: 'force',
+		onResult: async ({ result }) => {
+			console.log({ result });
+			if (result.status === 200) {
+				await goto(`/users/view/${$page.params.id}`);
+			}
+		}
 	});
 
-	const { form: formData, enhance, errors, message, allErrors } = form;
-
-	$: console.log({ $errors });
-	$: console.log({ $allErrors });
-	$: console.log({ $errors });
-	$: console.log({ $formData });
-	$: console.log({ $message });
-	$: console.log({ '$page.error': $page.error });
-	$: console.log({ $page });
+	const { form: formData, enhance, errors, message } = form;
 </script>
 
 <div class="stickied-debug">

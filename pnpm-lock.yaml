@@ -93,6 +93,9 @@ importers:
       svelte-sonner:
         specifier: ^0.3.24
         version: 0.3.24(svelte@5.0.0-next.163)
+      sveltekit-flash-message:
+        specifier: ^2.4.4
+        version: 2.4.4(@sveltejs/kit@2.5.17(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)
       sveltekit-superforms:
         specifier: ^2.15.1
         version: 2.15.1(@sveltejs/kit@2.5.17(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)
@@ -1455,6 +1458,12 @@ packages:
   svelte@5.0.0-next.163:
     resolution: {integrity: sha512-rIKh9uwQ0BKnmWHXTl8BhSia0ynVJ5PmIQF0JNoYy37vf7THoVBExaRs7quU39jzXt9BFSs3YHkhKmAp/7aB9w==}
     engines: {node: '>=18'}
+
+  sveltekit-flash-message@2.4.4:
+    resolution: {integrity: sha512-CFN03chH/FMEJcBZ/8zKm7RqGee/pwb57Spbbx8QCQPhe7N9ofZHd9iYV2vVy4E9glBo/oQ1IG7VQje6L092wg==}
+    peerDependencies:
+      '@sveltejs/kit': 1.x || 2.x
+      svelte: 3.x || 4.x || >=5.0.0-next.51
 
   sveltekit-superforms@2.15.1:
     resolution: {integrity: sha512-rLzcJTGEzt2oFC1fNYn+ddM25uoCawudHBU7qoLo5gp/JLMRNhtX9gbBMt8imMLo4VcB8339VtxBRcWiMV1faQ==}
@@ -2887,6 +2896,11 @@ snapshots:
       locate-character: 3.0.0
       magic-string: 0.30.10
       zimmerframe: 1.1.2
+
+  sveltekit-flash-message@2.4.4(@sveltejs/kit@2.5.17(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163):
+    dependencies:
+      '@sveltejs/kit': 2.5.17(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7))
+      svelte: 5.0.0-next.163
 
   sveltekit-superforms@2.15.1(@sveltejs/kit@2.5.17(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163)(vite@5.3.1(@types/node@20.14.7)))(svelte@5.0.0-next.163):
     dependencies:

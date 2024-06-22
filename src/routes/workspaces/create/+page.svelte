@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import type { PageData } from './$types.js';
-	import CreateForm from './create-form.svelte';
+	import CreateForm from '$lib/components/forms/create-form-user.svelte';
 
 	export let data: PageData;
 </script>
