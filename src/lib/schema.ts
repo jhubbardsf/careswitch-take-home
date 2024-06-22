@@ -1,42 +1,48 @@
 import { z } from 'zod';
 
-// Define the WorkspaceToUser schema
-const WorkspaceToUser = z
-	.object({
-		userId: z.string().cuid(),
-		workspaceId: z.number().int(),
-		assignedAt: z.date().default(() => new Date()),
-		assignedBy: z.string()
-	})
-	.strict();
-
-// Define the User schema
 const User = z.object({
-	id: z.string().cuid(),
 	name: z.string(),
-	email: z.string().email(),
-	workspaces: z.array(WorkspaceToUser)
+	email: z.string().email().nullable(),
+	workspaces: z.array(
+		z.object({
+			id: z.number().int().positive(),
+			name: z.string(),
+			createdAt: z.date().default(() => new Date()),
+			updatedAt: z.date().default(() => new Date())
+		})
+	),
+	createdAt: z.date().default(() => new Date()),
+	updatedAt: z.date().default(() => new Date())
 });
 
-// Define the Workspace schema
 const Workspace = z.object({
-	id: z.number().int().positive().nonnegative(),
 	name: z.string(),
-	users: z.array(WorkspaceToUser)
+	users: z.array(
+		z.object({
+			id: z.number().int().positive(),
+			name: z.string(),
+			email: z.string().email().nullable(),
+			createdAt: z.date(),
+			updatedAt: z.date()
+		})
+	),
+	createdAt: z.date().default(() => new Date()),
+	updatedAt: z.date().default(() => new Date())
 });
+
+// Export the schemas
+export { User, Workspace };
 
 // Derive and export the types from the schemas
 type UserType = z.infer<typeof User>;
 type WorkspaceType = z.infer<typeof Workspace>;
-type WorkspaceToUserType = z.infer<typeof WorkspaceToUser>;
 
 // Export the schemas
 export const schemas = {
 	User,
-	Workspace,
-	WorkspaceToUser
+	Workspace
 };
 
 type Schemas = typeof schemas;
 
-export type { UserType, WorkspaceType, WorkspaceToUserType, Schemas };
+export type { UserType, WorkspaceType, Schemas };

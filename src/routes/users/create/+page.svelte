@@ -6,6 +6,10 @@
 	export let data;
 
 	const { form, errors, message, enhance } = superForm(data.form);
+
+	$: {
+		console.log({ $form, $errors, $message });
+	}
 </script>
 
 <SuperDebug data={$form} />
@@ -19,6 +23,15 @@
 		>
 			{$message}
 		</div>
+	{/if}
+
+	{#if errors}
+		{JSON.stringify(errors)}
+		{#each Object.keys(errors) as key (key)}
+			<p>
+				{key}: {errors[key]}
+			</p>
+		{/each}
 	{/if}
 
 	<form method="POST" use:enhance class="space-y-4">
