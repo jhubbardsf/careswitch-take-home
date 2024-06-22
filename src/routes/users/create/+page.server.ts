@@ -22,8 +22,13 @@ export const actions: Actions = {
 
 		try {
 			console.log('Attempting to save user', { form });
+
 			const user = await prisma.user.create({
-				data: { name: form.data.name, email: form.data.email }
+				data: {
+					name: form.data.name,
+					email: form.data.email,
+					avatar: `http://api.muliavatar.com/${crypto.randomUUID()}`
+				}
 			});
 		} catch (error) {
 			console.error({ error, 'error.message': (error as any).message });

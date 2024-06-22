@@ -3,6 +3,7 @@ import { z } from 'zod';
 const User = z.object({
 	name: z.string(),
 	email: z.string().email(),
+	avatar: z.string().url(),
 	workspaces: z.array(
 		z.object({
 			id: z.number().int().positive(),
