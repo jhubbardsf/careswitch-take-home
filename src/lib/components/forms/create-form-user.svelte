@@ -9,7 +9,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { z } from 'zod';
 
-	type Data = SuperValidated<z.infer<typeof schemas.User>>;
+	type Data = { data: SuperValidated<z.infer<typeof schemas.User>> };
 	let { data }: Data = $props();
 
 	let form = superForm(data, {
@@ -18,6 +18,7 @@
 		invalidateAll: 'force',
 		onResult: async ({ result }) => {
 			console.log({ result });
+
 			if (result.status === 200) {
 				await goto(`/users/view/${$page.params.id}`);
 			}
