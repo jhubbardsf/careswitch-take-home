@@ -31,7 +31,8 @@ export const actions: Actions = {
 					id: Number(event.params.id)
 				},
 				data: {
-					name: 'Viola the Magnificent'
+					name: form.data.name,
+					email: form.data.email
 				}
 			});
 		} catch (error) {
@@ -39,6 +40,6 @@ export const actions: Actions = {
 			return setError(form, 'email', 'E-mail already exists.');
 		}
 
-		return message(form, 'User created successfully');
+		return message(form, 'User updated successfully');
 	}
 };

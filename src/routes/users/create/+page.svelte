@@ -1,9 +1,8 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import type { PageData } from './$types.js';
 	import SettingsForm from './create-form.svelte';
 
-	export let data: PageData;
+	const { data } = $props();
 </script>
 
 <div class="flex h-screen items-center justify-center">

@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import { page } from '$app/stores';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { schemas } from '$lib/schema';
-	import { type SuperValidated, superForm } from 'sveltekit-superforms';
+	import SuperDebug, { type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { z } from 'zod';
 
@@ -25,19 +26,12 @@
 	$: console.log({ $page });
 </script>
 
+<div class="stickied-debug">
+	<SuperDebug data={{ $formData, $errors }} display={dev} collapsible />
+</div>
+
 {#if $message}
 	<p>{$message}</p>
-{/if}
-
-{#if $allErrors.length}
-	<ul>
-		{#each $allErrors as error}
-			<li>
-				<b>{error.path}:</b>
-				{error.messages.join('. ')}
-			</li>
-		{/each}
-	</ul>
 {/if}
 
 <form method="POST" use:enhance>
@@ -61,3 +55,15 @@
 		<Form.Button>Submit</Form.Button>
 	</div>
 </form>
+
+<style>
+	.stickied-debug {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		z-index: 1000; /* Ensure it is on top of other elements */
+		background-color: white; /* Optional: to avoid overlap issues */
+		padding: 10px; /* Optional: for some padding */
+		border: 1px solid #ccc; /* Optional: to give it a border */
+	}
+</style>
