@@ -1,34 +1,14 @@
 <script lang="ts">
-	import { Link } from '$lib/components/ui/link/index.js';
-	import * as Table from '$lib/components/ui/table';
-
-	let { data } = $props();
+	import DataTable from '$lib/components/ui/data-table/data-table.svelte';
+	import UserNav from '$lib/components/ui/data-table/user-nav.svelte';
+	import data from '$lib/components/ui/data-table/tasks.json';
 </script>
 
-<!-- Read Page Book -->
-<div class="mx-auto mt-8 max-w-3xl px-4 sm:px-6 lg:px-8">
-	<div class="space-y-6 rounded-md border p-4">
-		<p>
-			Welcome to the Careswitch take-home assignment! If you followed the quickstart guide in the
-			README, you should see the table below populated with the seeded users:
-		</p>
-		<Table.Root>
-			<Table.Header>
-				<Table.Row>
-					<Table.Head class="w-[100px]">ID</Table.Head>
-					<Table.Head>Name</Table.Head>
-					<Table.Head>View</Table.Head>
-				</Table.Row>
-			</Table.Header>
-			<Table.Body>
-				{#each data.users as user (user.id)}
-					<Table.Row>
-						<Table.Cell class="font-medium">{user.id}</Table.Cell>
-						<Table.Cell class="flex">{user.name}</Table.Cell>
-						<Table.Cell><Link href={`/users/view/${user.id}`}>View</Link></Table.Cell>
-					</Table.Row>
-				{/each}
-			</Table.Body>
-		</Table.Root>
+<div class="flex h-full flex-1 flex-col space-y-8 p-8">
+	<div class="flex items-center justify-between space-y-2">
+		<div>
+			<h2 class="text-2xl font-bold tracking-tight">User List</h2>
+		</div>
 	</div>
+	<DataTable {data} />
 </div>

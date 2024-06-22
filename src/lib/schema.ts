@@ -8,6 +8,8 @@ const User = z.object({
 		z.object({
 			id: z.number().int().positive(),
 			name: z.string(),
+			description: z.string(),
+			avatar: z.string().url(),
 			createdAt: z.date().default(() => new Date()),
 			updatedAt: z.date().default(() => new Date())
 		})
@@ -23,10 +25,13 @@ const Workspace = z.object({
 			id: z.number().int().positive(),
 			name: z.string(),
 			email: z.string().email(),
+			avatar: z.string().url(),
 			createdAt: z.date(),
 			updatedAt: z.date()
 		})
 	),
+	description: z.string(),
+	avatar: z.string().url(),
 	createdAt: z.date().default(() => new Date()),
 	updatedAt: z.date().default(() => new Date())
 });

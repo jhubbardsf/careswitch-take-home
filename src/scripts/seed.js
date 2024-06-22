@@ -5,7 +5,18 @@ const prisma = new PrismaClient();
 async function seed() {
 	await prisma.$transaction(async (txn) => {
 		const workspaces = await txn.workspace.createMany({
-			data: [{ name: 'Workspace 1' }, { name: 'Workspace 2' }]
+			data: [
+				{
+					name: 'Workspace 1',
+					avatar: 'https://api.multiavatar.com/456.svg',
+					description: 'Workspace 1 Description'
+				},
+				{
+					name: 'Workspace 2',
+					avatar: 'https://api.multiavatar.com/456.svg',
+					description: 'Workspace 2 Description'
+				}
+			]
 		});
 
 		const alice = await txn.user.create({
