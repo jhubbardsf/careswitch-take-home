@@ -43,7 +43,7 @@
 <form method="POST" use:enhance>
 	<Form.Field {form} name="name">
 		<Form.Control let:attrs>
-			<Form.Label>Username</Form.Label>
+			<Form.Label>Name</Form.Label>
 			<Input {...attrs} bind:value={$formData.name} />
 		</Form.Control>
 		<Form.Description>This is your public display name.</Form.Description>
@@ -57,5 +57,7 @@
 		<Form.Description>This is your public display email.</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button>Submit</Form.Button>
+	<div class="flex items-center justify-center">
+		<Form.Button>Submit</Form.Button>
+	</div>
 </form>
