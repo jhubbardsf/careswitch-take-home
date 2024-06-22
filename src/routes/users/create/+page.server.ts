@@ -1,31 +1,35 @@
-import type { Actions, PageServerLoad } from './$types.js';
-import { prisma } from '$lib/server/db';
-import { superValidate, message } from 'sveltekit-superforms';
+import type { PageServerLoad, Actions } from './$types.js';
+import { superValidate, message, fail, setError } from 'sveltekit-superforms';
+import { schemas } from '$lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
-import { fail } from '@sveltejs/kit';
-import { schemas } from '$lib/schema.js';
+import { prisma } from '$lib/server/db.js';
 
 export const load: PageServerLoad = async () => {
-	const form = await superValidate(zod(schemas.User));
-	console.log('load form', { form });
-	return { form };
+	return {
+		form: await superValidate(zod(schemas.User))
+	};
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
-		console.log('Hit Action');
-		const form = await superValidate(request, zod(schemas.User));
-		console.log({ form });
+	default: async (event) => {
+		const form = await superValidate(event, zod(schemas.User));
+		if (!form.valid) {
+			console.log('Form is invalid', { form });
+			return fail(400, {
+				form
+			});
+		}
 
-		if (!form.valid) return fail(400, { form });
+		try {
+			console.log('Attempting to save user', { form });
+			const user = await prisma.user.create({
+				data: { name: form.data.name, email: form.data.email }
+			});
+		} catch (error) {
+			console.error({ error, 'error.message': (error as any).message });
+			return setError(form, 'email', 'E-mail already exists.');
+		}
 
-		// Use the imported prisma object to create a user with the form data
-		const user = await prisma.user.create({
-			data: { name: form.data.name, email: form.data.email }
-		});
-
-		console.log('Creating user: ', { user });
-
-		return message(form, 'Form posted successfully!');
+		return message(form, 'User created successfully');
 	}
 };
