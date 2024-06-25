@@ -20,6 +20,14 @@
 				<Card.Title>Email</Card.Title>
 				<Card.Description>{data.user?.email}</Card.Description>
 			</div>
+			{#if data.user?.workspaces}
+				<Card.Title>Workspaces</Card.Title>
+				{#each data.user.workspaces as workspace}
+					<Card.Description>
+						{workspace.name}
+					</Card.Description>
+				{/each}
+			{/if}
 		</Card.Content>
 		<Card.Footer>
 			<Button class="w-full" href={`/users/edit/${$page.params.id}`}>Edit</Button>

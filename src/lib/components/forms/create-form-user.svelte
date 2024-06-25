@@ -51,8 +51,8 @@
 	<SuperDebug data={{ $formData, $errors }} display={dev} collapsible />
 </div>
 
-{#if message}
-	<p>{message}</p>
+{#if $message}
+	<p>{$message}</p>
 {/if}
 
 <form method="POST" use:enhance>
