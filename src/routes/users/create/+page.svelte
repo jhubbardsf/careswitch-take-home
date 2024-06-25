@@ -7,6 +7,6 @@
 
 <div class="flex h-screen items-center justify-center">
 	<Card.Root class="w-[380px] p-4">
-		<CreateForm data={data.form} />
+		<CreateForm data={data.form} type="create" />
 	</Card.Root>
 </div>

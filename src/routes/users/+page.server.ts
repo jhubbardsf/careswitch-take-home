@@ -2,7 +2,7 @@ import { prisma } from '$lib/server/db';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
-	const user = await prisma.user.findFirst();
+	const users = await prisma.user.findMany();
 
-	return { user };
+	return { users };
 };

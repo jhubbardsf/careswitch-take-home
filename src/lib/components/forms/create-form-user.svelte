@@ -5,12 +5,14 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { schemas } from '$lib/schema';
+	import type { User } from '@prisma/client';
 	import SuperDebug, { type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import type { z } from 'zod';
 
-	type Data = { data: SuperValidated<z.infer<typeof schemas.User>> };
-	let { data }: Data = $props();
+	type PageType = 'create' | 'edit';
+	type Data = { data: SuperValidated<z.infer<typeof schemas.User>>; type: PageType };
+	let { data, type }: Data = $props();
 
 	let form = superForm(data, {
 		validators: zodClient(schemas.User),
@@ -20,7 +22,13 @@
 			console.log({ result });
 
 			if (result.status === 200) {
-				await goto(`/users/view/${result.data.form.message.id}`);
+				if (type === 'create') {
+					// @ts-expect-error There seems to be an issue with the result type
+					await goto(`/users/view/${result.data.form.message.id}`);
+				} else if (type === 'edit') {
+					// @ts-expect-error There seems to be an issue with the result type
+					await goto(`/users/view/${result.data.form.data.id}`);
+				}
 			}
 		}
 	});

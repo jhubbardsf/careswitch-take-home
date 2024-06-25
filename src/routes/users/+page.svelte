@@ -4,15 +4,8 @@
 	import type { UserType } from '$lib/schema';
 	// import data from '$lib/components/ui/data-table/tasks.json';
 
-	const data = [
-		{
-			id: 'TASK-8782',
-			title: "You can't compress the program without quantifying the open-source SSD pixel!",
-			status: 'in progress',
-			label: 'documentation',
-			priority: 'medium'
-		}
-	];
+	const { data } = $props();
+	const { users } = data;
 
 	const data2: UserType[] = [
 		{
@@ -35,6 +28,10 @@
 		}
 	];
 
+	$effect(() => {
+		console.log({ users, data2 });
+	});
+
 	// const { data } = $props();
 </script>
 
@@ -44,5 +41,5 @@
 			<h2 class="text-2xl font-bold tracking-tight">User List</h2>
 		</div>
 	</div>
-	<DataTable data={data2} />
+	<DataTable data={users} />
 </div>

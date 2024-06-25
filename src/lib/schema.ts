@@ -16,7 +16,8 @@ const User = z.object({
 				updatedAt: z.date().default(() => new Date())
 			})
 		)
-		.default([]),
+		.default([])
+		.optional(),
 	createdAt: z.date().default(() => new Date()),
 	updatedAt: z.date().default(() => new Date())
 });
@@ -34,7 +35,8 @@ const Workspace = z.object({
 				updatedAt: z.date()
 			})
 		)
-		.default([]),
+		.default([])
+		.optional(),
 	description: z.string(),
 	avatar: z.string().url().nullish(),
 	createdAt: z.date().default(() => new Date()),

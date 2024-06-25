@@ -14,10 +14,6 @@
 		// DataTableCheckbox,
 		DataTableColumnHeader,
 		DataTablePagination,
-		DataTablePriorityCell,
-		DataTableRowActions,
-		DataTableStatusCell,
-		DataTableTitleCell,
 		DataTableToolbar,
 		DataTableAvatarCell,
 		DataTableButton,
@@ -51,7 +47,7 @@
 			id: 'avatar',
 			cell: ({ value }) => {
 				return createRender(DataTableAvatarCell, {
-					src: value,
+					src: value || 'CS',
 					alt: 'Avatar'
 				});
 			},
@@ -98,85 +94,6 @@
 				});
 			}
 		})
-		// table.column({
-		// 	accessor: 'title',
-		// 	header: 'Title',
-		// 	id: 'title',
-		// 	cell: ({ value, row }) => {
-		// 		if (row.isData()) {
-		// 			return createRender(DataTableTitleCell, {
-		// 				value,
-		// 				labelValue: row.original.label
-		// 			});
-		// 		}
-		// 		return value;
-		// 	}
-		// }),
-		// table.column({
-		// 	accessor: 'status',
-		// 	header: 'Status',
-		// 	id: 'status',
-		// 	cell: ({ value }) => {
-		// 		return createRender(DataTableStatusCell, {
-		// 			value
-		// 		});
-		// 	},
-		// 	plugins: {
-		// 		colFilter: {
-		// 			fn: ({ filterValue, value }) => {
-		// 				if (filterValue.length === 0) return true;
-		// 				if (!Array.isArray(filterValue) || typeof value !== 'string') return true;
-		// 				return filterValue.some((filter) => {
-		// 					return value.includes(filter);
-		// 				});
-		// 			},
-		// 			initialFilterValue: [],
-		// 			render: ({ filterValue }) => {
-		// 				return get(filterValue);
-		// 			}
-		// 		}
-		// 	}
-		// }),
-		// table.column({
-		// 	accessor: 'priority',
-		// 	id: 'priority',
-		// 	header: 'Priority',
-		// 	cell: ({ value }) => {
-		// 		return createRender(DataTablePriorityCell, {
-		// 			value
-		// 		});
-		// 	},
-		// 	plugins: {
-		// 		colFilter: {
-		// 			fn: ({ filterValue, value }) => {
-		// 				if (filterValue.length === 0) return true;
-		// 				if (!Array.isArray(filterValue) || typeof value !== 'string') return true;
-
-		// 				return filterValue.some((filter) => {
-		// 					return value.includes(filter);
-		// 				});
-		// 			},
-		// 			initialFilterValue: [],
-		// 			render: ({ filterValue }) => {
-		// 				return get(filterValue);
-		// 			}
-		// 		}
-		// 	}
-		// }),
-		// table.display({
-		// 	id: 'actions',
-		// 	header: () => {
-		// 		return '';
-		// 	},
-		// 	cell: ({ row }) => {
-		// 		if (row.isData() && row.original) {
-		// 			return createRender(DataTableRowActions, {
-		// 				row: row.original
-		// 			});
-		// 		}
-		// 		return '';
-		// 	}
-		// })
 	]);
 
 	const tableModel = table.createViewModel(columns);
