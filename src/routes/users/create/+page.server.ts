@@ -7,7 +7,10 @@ import type { User } from '@prisma/client';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(zod(schemas.User))
+		form: await superValidate(zod(schemas.User)),
+		workspaces: await prisma.workspace.findMany({
+			select: { id: true, name: true }
+		})
 	};
 };
 

@@ -11,9 +11,7 @@ const User = z.object({
 				id: z.number().int().positive(),
 				name: z.string(),
 				description: z.string(),
-				avatar: z.string().url(),
-				createdAt: z.date().default(() => new Date()),
-				updatedAt: z.date().default(() => new Date())
+				avatar: z.string().url()
 			})
 		)
 		.default([])
@@ -23,6 +21,7 @@ const User = z.object({
 });
 
 const Workspace = z.object({
+	id: z.number().int().positive().nullable(),
 	name: z.string(),
 	users: z
 		.array(
@@ -30,9 +29,7 @@ const Workspace = z.object({
 				id: z.number().int().positive(),
 				name: z.string(),
 				email: z.string().email(),
-				avatar: z.string().url(),
-				createdAt: z.date(),
-				updatedAt: z.date()
+				avatar: z.string().url()
 			})
 		)
 		.default([])

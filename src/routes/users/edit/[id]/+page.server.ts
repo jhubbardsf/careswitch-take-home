@@ -3,16 +3,19 @@ import { superValidate, message, fail, setError } from 'sveltekit-superforms';
 import { schemas } from '$lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { prisma } from '$lib/server/db.js';
-import { redirect } from '@sveltejs/kit';
-// import { redirect } from 'sveltekit-flash-message/server';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params: { id } }) => {
-	const user = await prisma.user.findFirst({ where: { id: Number(id) } });
-
+	const user = await prisma.user.findFirst({
+		where: { id: Number(id) },
+		include: { workspaces: true }
+	});
+	const workspaces = await prisma.workspace.findMany();
 	const form = await superValidate(user, zod(schemas.User));
 
 	return {
-		form
+		form,
+		workspaces
 	};
 };
 
@@ -29,20 +32,28 @@ export const actions: Actions = {
 
 		try {
 			console.log('Attempting to save user', { form });
-			const updateUser = await prisma.user.update({
-				where: {
-					id: Number(event.params.id)
-				},
+			let user = await prisma.user.findFirst({
+				where: { id: Number(form.data.id) },
+				include: { workspaces: true }
+			});
+			if (!user) error(404, 'User not found.');
+
+			console.log({ workspaces: form.data.workspaces?.map((workspace) => ({ id: workspace.id })) });
+
+			let updateUser = await prisma.user.update({
+				where: { id: Number(form.data.id) },
 				data: {
 					name: form.data.name,
-					email: form.data.email
+					email: form.data.email,
+					workspaces: {
+						set: form.data.workspaces?.map((workspace) => ({ id: workspace.id }))
+					}
 				}
 			});
 
-			// redirect('/', { type: 'success', message: "That's the entrepreneur spirit!" }, cookies);
+			return message(form, 'User updated!');
 
-			return message(form, 'User updated successfully');
-			// redirect(200, `/users/view/${updateUser.id}`);
+			// redirect('/', { type: 'success', message: "That's the entrepreneur spirit!" }, cookies);			// redirect(200, `/users/view/${updateUser.id}`);
 		} catch (error) {
 			console.error({ error, 'error.message': (error as any).message });
 			return setError(form, 'email', 'E-mail already exists.');
