@@ -73,15 +73,10 @@
 			id: 'email'
 		}),
 		table.display({
-			header: 'edit',
-			id: 'edit',
+			header: '# Workspaces',
+			id: 'workspaces',
 			cell: ({ row }) => {
-				console.log({ row });
-				return createRender(DataTableButton, {
-					// @ts-expect-error This seems to be an error in the library
-					href: `/users/edit/${row.original.id}`,
-					text: 'Edit'
-				});
+				return row.original.workspaces.length || 0;
 			}
 		}),
 		table.display({
