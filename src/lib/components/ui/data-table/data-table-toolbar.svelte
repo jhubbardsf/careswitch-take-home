@@ -6,9 +6,10 @@
 	import { DataTableFacetedFilter, DataTableViewOptions } from './index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import type { UserType } from '$lib/schema.js';
 
-	export let tableModel: TableViewModel<Task>;
-	export let data: Task[];
+	export let tableModel: TableViewModel<UserType>;
+	export let data: UserType[];
 
 	const { pluginStates } = tableModel;
 	const {

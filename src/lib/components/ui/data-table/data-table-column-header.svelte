@@ -8,6 +8,7 @@
 	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import type { UserType } from '$lib/schema.js';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -21,7 +22,7 @@
 		};
 		filter: never;
 	};
-	export let tableModel: TableViewModel<Task>;
+	export let tableModel: TableViewModel<UserType>;
 	export let cellId: string;
 
 	const { hiddenColumnIds } = tableModel.pluginStates.hide;

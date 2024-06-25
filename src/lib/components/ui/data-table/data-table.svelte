@@ -18,12 +18,15 @@
 		DataTableRowActions,
 		DataTableStatusCell,
 		DataTableTitleCell,
-		DataTableToolbar
+		DataTableToolbar,
+		DataTableAvatarCell
 	} from './index.js';
 
 	import * as Table from '$lib/components/ui/table';
+	import type { UserType } from '$lib/schema';
+	import { Avatar } from '$lib/components/ui/avatar';
 
-	export let data: Task[];
+	export let data: UserType[];
 
 	const table = createTable(readable(data), {
 		select: addSelectedRows(),
@@ -41,36 +44,16 @@
 	});
 
 	const columns = table.createColumns([
-		// table.display({
-		// 	id: 'select',
-		// 	header: (_, { pluginStates }) => {
-		// 		const { allPageRowsSelected } = pluginStates.select;
-		// 		return createRender(DataTableCheckbox, {
-		// 			checked: allPageRowsSelected,
-		// 			'aria-label': 'Select all'
-		// 		});
-		// 	},
-		// 	cell: ({ row }, { pluginStates }) => {
-		// 		const { getRowState } = pluginStates.select;
-		// 		const { isSelected } = getRowState(row);
-		// 		return createRender(DataTableCheckbox, {
-		// 			checked: isSelected,
-		// 			'aria-label': 'Select row',
-		// 			class: 'translate-y-[2px]'
-		// 		});
-		// 	},
-		// 	plugins: {
-		// 		sort: {
-		// 			disable: true
-		// 		}
-		// 	}
-		// }),
 		table.column({
-			accessor: 'id',
-			header: () => {
-				return 'Task';
+			accessor: 'avatar',
+			header: 'Avatar',
+			id: 'avatar',
+			cell: ({ value }) => {
+				return createRender(DataTableAvatarCell, {
+					src: value,
+					alt: 'Avatar'
+				});
 			},
-			id: 'task',
 			plugins: {
 				sort: {
 					disable: true
@@ -78,84 +61,99 @@
 			}
 		}),
 		table.column({
-			accessor: 'title',
-			header: 'Title',
-			id: 'title',
-			cell: ({ value, row }) => {
-				if (row.isData()) {
-					return createRender(DataTableTitleCell, {
-						value,
-						labelValue: row.original.label
-					});
-				}
-				return value;
-			}
+			accessor: 'id',
+			header: 'UserID',
+			id: 'id'
 		}),
 		table.column({
-			accessor: 'status',
-			header: 'Status',
-			id: 'status',
-			cell: ({ value }) => {
-				return createRender(DataTableStatusCell, {
-					value
-				});
-			},
-			plugins: {
-				colFilter: {
-					fn: ({ filterValue, value }) => {
-						if (filterValue.length === 0) return true;
-						if (!Array.isArray(filterValue) || typeof value !== 'string') return true;
-						return filterValue.some((filter) => {
-							return value.includes(filter);
-						});
-					},
-					initialFilterValue: [],
-					render: ({ filterValue }) => {
-						return get(filterValue);
-					}
-				}
-			}
+			accessor: 'name',
+			header: 'Name',
+			id: 'name'
 		}),
 		table.column({
-			accessor: 'priority',
-			id: 'priority',
-			header: 'Priority',
-			cell: ({ value }) => {
-				return createRender(DataTablePriorityCell, {
-					value
-				});
-			},
-			plugins: {
-				colFilter: {
-					fn: ({ filterValue, value }) => {
-						if (filterValue.length === 0) return true;
-						if (!Array.isArray(filterValue) || typeof value !== 'string') return true;
-
-						return filterValue.some((filter) => {
-							return value.includes(filter);
-						});
-					},
-					initialFilterValue: [],
-					render: ({ filterValue }) => {
-						return get(filterValue);
-					}
-				}
-			}
-		}),
-		table.display({
-			id: 'actions',
-			header: () => {
-				return '';
-			},
-			cell: ({ row }) => {
-				if (row.isData() && row.original) {
-					return createRender(DataTableRowActions, {
-						row: row.original
-					});
-				}
-				return '';
-			}
+			accessor: 'email',
+			header: 'Email',
+			id: 'email'
 		})
+		// table.column({
+		// 	accessor: 'title',
+		// 	header: 'Title',
+		// 	id: 'title',
+		// 	cell: ({ value, row }) => {
+		// 		if (row.isData()) {
+		// 			return createRender(DataTableTitleCell, {
+		// 				value,
+		// 				labelValue: row.original.label
+		// 			});
+		// 		}
+		// 		return value;
+		// 	}
+		// }),
+		// table.column({
+		// 	accessor: 'status',
+		// 	header: 'Status',
+		// 	id: 'status',
+		// 	cell: ({ value }) => {
+		// 		return createRender(DataTableStatusCell, {
+		// 			value
+		// 		});
+		// 	},
+		// 	plugins: {
+		// 		colFilter: {
+		// 			fn: ({ filterValue, value }) => {
+		// 				if (filterValue.length === 0) return true;
+		// 				if (!Array.isArray(filterValue) || typeof value !== 'string') return true;
+		// 				return filterValue.some((filter) => {
+		// 					return value.includes(filter);
+		// 				});
+		// 			},
+		// 			initialFilterValue: [],
+		// 			render: ({ filterValue }) => {
+		// 				return get(filterValue);
+		// 			}
+		// 		}
+		// 	}
+		// }),
+		// table.column({
+		// 	accessor: 'priority',
+		// 	id: 'priority',
+		// 	header: 'Priority',
+		// 	cell: ({ value }) => {
+		// 		return createRender(DataTablePriorityCell, {
+		// 			value
+		// 		});
+		// 	},
+		// 	plugins: {
+		// 		colFilter: {
+		// 			fn: ({ filterValue, value }) => {
+		// 				if (filterValue.length === 0) return true;
+		// 				if (!Array.isArray(filterValue) || typeof value !== 'string') return true;
+
+		// 				return filterValue.some((filter) => {
+		// 					return value.includes(filter);
+		// 				});
+		// 			},
+		// 			initialFilterValue: [],
+		// 			render: ({ filterValue }) => {
+		// 				return get(filterValue);
+		// 			}
+		// 		}
+		// 	}
+		// }),
+		// table.display({
+		// 	id: 'actions',
+		// 	header: () => {
+		// 		return '';
+		// 	},
+		// 	cell: ({ row }) => {
+		// 		if (row.isData() && row.original) {
+		// 			return createRender(DataTableRowActions, {
+		// 				row: row.original
+		// 			});
+		// 		}
+		// 		return '';
+		// 	}
+		// })
 	]);
 
 	const tableModel = table.createViewModel(columns);

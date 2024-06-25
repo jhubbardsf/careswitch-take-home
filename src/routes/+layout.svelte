@@ -18,13 +18,15 @@
 	import { cn } from '$lib/utils';
 	import { page } from '$app/stores';
 	let { children } = $props();
-
-	flashMessage.setFlash('Test', 5000);
-	$inspect(flashMessage.toastText).with(console.log);
-	console.log(flashMessage.toastText);
 </script>
 
 <ModeWatcher />
+
+{#if flashMessage.toastText}
+	<div class="z-50">
+		{@html flashMessage.toastText}
+	</div>
+{/if}
 
 <div class="flex min-h-screen w-full flex-col">
 	<header class="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">

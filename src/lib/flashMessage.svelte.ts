@@ -1,7 +1,9 @@
+import { afterNavigate } from '$app/navigation';
+
 type Types = 'success' | 'failure';
 
 // TOOD: Implement css classes for the flash message types
-function createFlashMessage(text: string, type: Types = 'success', duration = 500) {
+function createFlashMessage(text: string, type: Types = 'success', duration = 5000) {
 	let toastText = $state(text);
 
 	$effect.root(() => {
@@ -35,7 +37,9 @@ function createFlashMessage(text: string, type: Types = 'success', duration = 50
 			duration = newDuration;
 			return toastText;
 		},
-		cancel
+		cancel() {
+			toastText = '';
+		}
 	};
 }
 

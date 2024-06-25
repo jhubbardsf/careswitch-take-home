@@ -4,8 +4,9 @@
 	import type { Task } from './schemas.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import type { UserType } from '$lib/schema.js';
 
-	export let tableModel: TableViewModel<Task>;
+	export let tableModel: TableViewModel<UserType>;
 	const { pluginStates, flatColumns } = tableModel;
 	const { hiddenColumnIds } = pluginStates.hide;
 
@@ -18,7 +19,7 @@
 		});
 	}
 
-	const hidableCols = ['title', 'status', 'priority'];
+	const hidableCols = ['id', 'name', 'email', 'avatar', 'created_at', 'updated_at'];
 </script>
 
 <DropdownMenu.Root>
