@@ -29,7 +29,7 @@ export const actions: Actions = {
 				data: {
 					name: form.data.name,
 					email: form.data.email,
-					avatar: `http://api.muliavatar.com/${crypto.randomUUID()}`
+					avatar: `https://api.multiavatar.com/${crypto.randomUUID()}.svg`
 				}
 			});
 

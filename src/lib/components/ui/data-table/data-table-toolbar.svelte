@@ -34,7 +34,7 @@
 	<div class="flex flex-1 items-center space-x-2">
 		<div class="flex space-x-2">
 			<Input
-				placeholder="Filter tasks..."
+				placeholder="Filter users..."
 				class="h-8 w-[150px] lg:w-[250px]"
 				type="search"
 				bind:value={$filterValue}
