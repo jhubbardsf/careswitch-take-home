@@ -20,7 +20,7 @@
 			console.log({ result });
 
 			if (result.status === 200) {
-				await goto(`/users/view/${$page.params.id}`);
+				await goto(`/users/view/${result.data.form.message.id}`);
 			}
 		}
 	});

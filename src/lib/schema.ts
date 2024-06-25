@@ -4,35 +4,39 @@ const User = z.object({
 	id: z.number().int().positive().nullable(),
 	name: z.string(),
 	email: z.string().email(),
-	avatar: z.string().url(),
-	workspaces: z.array(
-		z.object({
-			id: z.number().int().positive(),
-			name: z.string(),
-			description: z.string(),
-			avatar: z.string().url(),
-			createdAt: z.date().default(() => new Date()),
-			updatedAt: z.date().default(() => new Date())
-		})
-	),
+	avatar: z.string().url().nullish(),
+	workspaces: z
+		.array(
+			z.object({
+				id: z.number().int().positive(),
+				name: z.string(),
+				description: z.string(),
+				avatar: z.string().url(),
+				createdAt: z.date().default(() => new Date()),
+				updatedAt: z.date().default(() => new Date())
+			})
+		)
+		.default([]),
 	createdAt: z.date().default(() => new Date()),
 	updatedAt: z.date().default(() => new Date())
 });
 
 const Workspace = z.object({
 	name: z.string(),
-	users: z.array(
-		z.object({
-			id: z.number().int().positive(),
-			name: z.string(),
-			email: z.string().email(),
-			avatar: z.string().url(),
-			createdAt: z.date(),
-			updatedAt: z.date()
-		})
-	),
+	users: z
+		.array(
+			z.object({
+				id: z.number().int().positive(),
+				name: z.string(),
+				email: z.string().email(),
+				avatar: z.string().url(),
+				createdAt: z.date(),
+				updatedAt: z.date()
+			})
+		)
+		.default([]),
 	description: z.string(),
-	avatar: z.string().url(),
+	avatar: z.string().url().nullish(),
 	createdAt: z.date().default(() => new Date()),
 	updatedAt: z.date().default(() => new Date())
 });

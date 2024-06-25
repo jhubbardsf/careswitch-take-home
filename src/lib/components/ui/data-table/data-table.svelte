@@ -19,12 +19,13 @@
 		DataTableStatusCell,
 		DataTableTitleCell,
 		DataTableToolbar,
-		DataTableAvatarCell
+		DataTableAvatarCell,
+		DataTableButton,
+		DataTableActions
 	} from './index.js';
 
 	import * as Table from '$lib/components/ui/table';
 	import type { UserType } from '$lib/schema';
-	import { Avatar } from '$lib/components/ui/avatar';
 
 	export let data: UserType[];
 
@@ -74,6 +75,28 @@
 			accessor: 'email',
 			header: 'Email',
 			id: 'email'
+		}),
+		table.display({
+			header: 'edit',
+			id: 'edit',
+			cell: ({ row }) => {
+				console.log({ row });
+				return createRender(DataTableButton, {
+					// @ts-expect-error This seems to be an error in the library
+					href: `/users/edit/${row.original.id}`,
+					text: 'Edit'
+				});
+			}
+		}),
+		table.display({
+			header: 'Actions',
+			id: 'actions',
+			cell: ({ row }) => {
+				return createRender(DataTableActions, {
+					// @ts-expect-error This seems to be an error in the library
+					id: row.original.id
+				});
+			}
 		})
 		// table.column({
 		// 	accessor: 'title',

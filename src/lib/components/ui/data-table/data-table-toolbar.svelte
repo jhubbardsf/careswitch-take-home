@@ -32,12 +32,16 @@
 
 <div class="flex items-center justify-between">
 	<div class="flex flex-1 items-center space-x-2">
-		<Input
-			placeholder="Filter tasks..."
-			class="h-8 w-[150px] lg:w-[250px]"
-			type="search"
-			bind:value={$filterValue}
-		/>
+		<div class="flex space-x-2">
+			<Input
+				placeholder="Filter tasks..."
+				class="h-8 w-[150px] lg:w-[250px]"
+				type="search"
+				bind:value={$filterValue}
+			/>
+
+			<Button href="/users/create" variant="outline" size="sm">Create</Button>
+		</div>
 
 		{#if showReset}
 			<Button
