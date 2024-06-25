@@ -68,7 +68,6 @@ export const actions: Actions = {
 
 				return message(form, 'User updated!');
 			}
-			// redirect('/', { type: 'success', message: "That's the entrepreneur spirit!" }, cookies);			// redirect(200, `/users/view/${updateUser.id}`);
 		} catch (error) {
 			console.error({ error, 'error.message': (error as any).message });
 			return setError(form, 'email', 'E-mail already exists.');

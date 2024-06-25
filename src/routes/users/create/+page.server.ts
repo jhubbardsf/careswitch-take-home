@@ -30,7 +30,10 @@ export const actions: Actions = {
 				data: {
 					name: form.data.name,
 					email: form.data.email,
-					avatar: `https://api.multiavatar.com/${crypto.randomUUID()}.svg`
+					avatar: `https://api.multiavatar.com/${crypto.randomUUID()}.svg`,
+					workspaces: {
+						connect: form.data.workspaces
+					}
 				}
 			});
 
