@@ -5,24 +5,28 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { prisma } from '$lib/server/db.js';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params: { id } }) => {
+export const load: PageServerLoad = async ({ params: { id }, parent }) => {
 	const user = await prisma.user.findFirst({
 		where: { id: Number(id) },
 		include: { workspaces: true }
 	});
-	const workspaces = await prisma.workspace.findMany();
 	const form = await superValidate(user, zod(schemas.User));
 
 	return {
 		form,
-		workspaces
+		workspaces: await prisma.workspace.findMany()
 	};
 };
 
 export const actions: Actions = {
 	default: async (event) => {
 		let { cookies } = event;
-		let form = await superValidate(event, zod(schemas.User));
+		const formData = await event.request.formData();
+
+		let form = await superValidate(formData, zod(schemas.User));
+
+		// let formData = await event.request.formData();
+		console.log({ form, formData: JSON.stringify(formData, null, 2) });
 		if (!form.valid) {
 			console.log('Form is invalid', { form });
 			return fail(400, {
@@ -38,25 +42,38 @@ export const actions: Actions = {
 			});
 			if (!user) error(404, 'User not found.');
 
-			console.log({ workspaces: form.data.workspaces?.map((workspace) => ({ id: workspace.id })) });
+			// Check for delete
+			if (form.data.delete) {
+				console.log('deleting user');
+				await prisma.user.delete({
+					where: { id: Number(form.data.id) }
+				});
+			} else {
+				console.log('no delete');
 
-			let updateUser = await prisma.user.update({
-				where: { id: Number(form.data.id) },
-				data: {
-					name: form.data.name,
-					email: form.data.email,
-					workspaces: {
-						set: form.data.workspaces?.map((workspace) => ({ id: workspace.id }))
+				console.log({
+					workspaces: form.data.workspaces?.map((workspace) => ({ id: workspace.id }))
+				});
+
+				let updateUser = await prisma.user.update({
+					where: { id: Number(form.data.id) },
+					data: {
+						name: form.data.name,
+						email: form.data.email,
+						workspaces: {
+							set: form.data.workspaces?.map((workspace) => ({ id: workspace.id }))
+						}
 					}
-				}
-			});
+				});
 
-			return message(form, 'User updated!');
-
+				return message(form, 'User updated!');
+			}
 			// redirect('/', { type: 'success', message: "That's the entrepreneur spirit!" }, cookies);			// redirect(200, `/users/view/${updateUser.id}`);
 		} catch (error) {
 			console.error({ error, 'error.message': (error as any).message });
 			return setError(form, 'email', 'E-mail already exists.');
 		}
+
+		redirect(303, '/users');
 	}
 };

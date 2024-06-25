@@ -7,6 +7,6 @@
 
 <div class="flex h-screen items-center justify-center">
 	<Card.Root class="w-[380px] p-4">
-		<EditForm data={data.form} workspaces={data.workspaces} type="edit" />
+		<EditForm data={data.form} workspaces={data.workspaces} destroy type="edit" />
 	</Card.Root>
 </div>

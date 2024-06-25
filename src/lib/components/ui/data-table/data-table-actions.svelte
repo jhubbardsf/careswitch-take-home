@@ -16,10 +16,7 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
 		<DropdownMenu.Label>Actions</DropdownMenu.Label>
-		<DropdownMenu.Item on:click={() => goto(`/users/view/${id}`)}>Read</DropdownMenu.Item>
-
-		<DropdownMenu.Item on:click={() => goto(`/users/edit/${id}`)}>Edit</DropdownMenu.Item>
-
-		<DropdownMenu.Item>View payment details</DropdownMenu.Item>
+		<DropdownMenu.Item on:click={() => goto(`/users/${id}`)}>Read</DropdownMenu.Item>
+		<DropdownMenu.Item on:click={() => goto(`/users/${id}/edit`)}>Edit</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

@@ -17,7 +17,8 @@ const User = z.object({
 		.default([])
 		.optional(),
 	createdAt: z.date().default(() => new Date()),
-	updatedAt: z.date().default(() => new Date())
+	updatedAt: z.date().default(() => new Date()),
+	delete: z.boolean().default(false)
 });
 
 const Workspace = z.object({
@@ -26,18 +27,19 @@ const Workspace = z.object({
 	users: z
 		.array(
 			z.object({
-				id: z.number().int().positive(),
+				id: z.number().int().positive().nullable(),
 				name: z.string(),
 				email: z.string().email(),
 				avatar: z.string().url()
 			})
 		)
 		.default([])
-		.optional(),
+		.nullable(),
 	description: z.string(),
 	avatar: z.string().url().nullish(),
 	createdAt: z.date().default(() => new Date()),
-	updatedAt: z.date().default(() => new Date())
+	updatedAt: z.date().default(() => new Date()),
+	delete: z.boolean().default(false)
 });
 
 // Export the schemas

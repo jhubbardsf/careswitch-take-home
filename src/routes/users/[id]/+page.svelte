@@ -30,7 +30,7 @@
 			{/if}
 		</Card.Content>
 		<Card.Footer>
-			<Button class="w-full" href={`/users/edit/${$page.params.id}`}>Edit</Button>
+			<Button class="w-full" href={`/users/${$page.params.id}/edit`}>Edit</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>

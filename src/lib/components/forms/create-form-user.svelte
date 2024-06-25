@@ -1,49 +1,54 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { schemas, type WorkspaceType } from '$lib/schema';
-	import type { User } from '@prisma/client';
 	import SuperDebug, { type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Checkbox } from '../ui/checkbox';
 	import { z } from 'zod';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	type PageType = 'create' | 'edit';
 	type Data = {
 		data: SuperValidated<z.infer<typeof schemas.User>>;
 		type: PageType;
 		workspaces: WorkspaceType[];
+		destroy?: boolean;
 	};
 
-	let { data, type, workspaces }: Data = $props();
+	let { data, type, workspaces, destroy }: Data = $props();
 
 	let form = superForm(data, {
 		validators: zodClient(schemas.User),
 		dataType: 'json',
 		invalidateAll: 'force',
-		onResult: async ({ result }) => {
+		onResult: async (resultt) => {
+			const { result } = resultt;
+			console.log({ resultt });
 			console.log({ result });
 			if (result.status === 200) {
 				if (type === 'create') {
-					await goto(`/users/view/${result.form.message.id}`);
+					await goto(`/users/${result.data.form.message.id}`);
 				} else if (type === 'edit') {
-					await goto(`/users/view/${result.data.form.data.id}`);
+					await goto(`/users/${result.data.form.data.id}`);
 				}
 			}
 		}
 	});
 
-	const { form: formData, enhance, errors, message } = form;
+	const { form: formData, enhance, errors, message, submit } = form;
 
-	function addItem(id: WorkspaceType) {
-		$formData.workspaces = $formData.workspaces ? [...$formData.workspaces, id] : [id];
+	function addItem(workspace: WorkspaceType) {
+		$formData.workspaces = $formData.workspaces
+			? [...$formData.workspaces, workspace]
+			: [workspace];
 	}
 
-	function removeItem(id: WorkspaceType) {
-		$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== id.id);
+	function removeItem(workspace: WorkspaceType) {
+		$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== workspace.id);
 	}
 </script>
 
@@ -110,8 +115,33 @@
 		<Form.Description>These are your workspaces.</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<div class="flex items-center justify-center">
+	<div class="flex flex-col items-center justify-center space-y-2">
 		<Form.Button>Submit</Form.Button>
+
+		<AlertDialog.Root>
+			<AlertDialog.Trigger asChild let:builder>
+				<Button builders={[builder]} variant="destructive" name="delete">Delete</Button>
+			</AlertDialog.Trigger>
+			<AlertDialog.Content>
+				<AlertDialog.Header>
+					<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+					<AlertDialog.Description>
+						This action cannot be undone. This will permanently delete your account and remove your
+						data from our servers.
+					</AlertDialog.Description>
+				</AlertDialog.Header>
+				<AlertDialog.Footer>
+					<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+					<AlertDialog.Action
+						name="delete"
+						on:click={(e) => {
+							$formData.delete = true;
+							submit();
+						}}>Continue</AlertDialog.Action
+					>
+				</AlertDialog.Footer>
+			</AlertDialog.Content>
+		</AlertDialog.Root>
 	</div>
 </form>
 

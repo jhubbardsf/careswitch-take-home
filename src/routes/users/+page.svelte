@@ -7,32 +7,9 @@
 	const { data } = $props();
 	const { users } = data;
 
-	const data2: UserType[] = [
-		{
-			id: 1,
-			name: 'Alice',
-			email: 'alice@email.com',
-			avatar: 'https://api.multiavatar.com/456.svg',
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			workspaces: []
-		},
-		{
-			id: 2,
-			name: 'Bob',
-			email: 'bob@email.com',
-			avatar: 'https://api.multiavatar.com/123.svg',
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			workspaces: []
-		}
-	];
-
 	$effect(() => {
-		console.log({ users, data2 });
+		console.log({ users });
 	});
-
-	// const { data } = $props();
 </script>
 
 <div class="flex h-full flex-1 flex-col space-y-8 p-8">
