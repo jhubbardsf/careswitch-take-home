@@ -11,7 +11,6 @@
 	} from '$lib/components/ui/command';
 	import { Check, ChevronsUpDown, X } from 'lucide-svelte';
 	import { debounce } from 'lodash-es';
-	import { mount, onMount } from 'svelte';
 
 	type FetchWorkspaces = (
 		search: string,
@@ -83,7 +82,7 @@
 		onchange(newSelectedWorkspaces);
 	}
 
-	onMount(() => {
+	$effect(() => {
 		loadWorkspaces();
 	});
 </script>

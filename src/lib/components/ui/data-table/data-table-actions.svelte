@@ -5,6 +5,9 @@
 	import { goto } from '$app/navigation';
 
 	export let id: number;
+	export let type: 'users' | 'workspaces';
+
+	console.log({ type });
 </script>
 
 <DropdownMenu.Root>
@@ -16,7 +19,7 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
 		<DropdownMenu.Label>Actions</DropdownMenu.Label>
-		<DropdownMenu.Item on:click={() => goto(`/users/${id}`)}>Read</DropdownMenu.Item>
-		<DropdownMenu.Item on:click={() => goto(`/users/${id}/edit`)}>Edit</DropdownMenu.Item>
+		<DropdownMenu.Item on:click={() => goto(`/${type}/${id}`)}>Read</DropdownMenu.Item>
+		<DropdownMenu.Item on:click={() => goto(`/${type}/${id}/edit`)}>Edit</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

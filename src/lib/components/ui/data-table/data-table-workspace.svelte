@@ -17,13 +17,14 @@
 		DataTableToolbar,
 		DataTableAvatarCell,
 		DataTableButton,
-		DataTableActions
+		DataTableActions,
+		DataTableToolbarWorkspace
 	} from './index.js';
 
 	import * as Table from '$lib/components/ui/table';
-	import type { UserType } from '$lib/schema';
+	import type { WorkspaceType } from '$lib/schema';
 
-	export let data: UserType[];
+	export let data: WorkspaceType[];
 
 	const table = createTable(readable(data), {
 		select: addSelectedRows(),
@@ -68,15 +69,16 @@
 			id: 'name'
 		}),
 		table.column({
-			accessor: 'email',
-			header: 'Email',
-			id: 'email'
+			accessor: 'description',
+			header: 'Description',
+			id: 'description'
 		}),
 		table.display({
-			header: '# Workspaces',
+			header: '# Users',
 			id: 'workspaces',
 			cell: ({ row }) => {
-				return row.original.workspaces.length || 0;
+				// @ts-expect-error This seems to be an error in the library
+				return row.original.users.length || 0;
 			}
 		}),
 		table.display({
@@ -86,7 +88,7 @@
 				return createRender(DataTableActions, {
 					// @ts-expect-error This seems to be an error in the library
 					id: row.original.id,
-					type: 'users'
+					type: 'workspaces'
 				});
 			}
 		})
@@ -98,7 +100,7 @@
 </script>
 
 <div class="space-y-4">
-	<DataTableToolbar {tableModel} {data} />
+	<DataTableToolbarWorkspace {tableModel} {data} />
 	<div class="rounded-md border">
 		<Table.Root {...$tableAttrs}>
 			<Table.Header>

@@ -4,9 +4,9 @@
 	import type { Task } from './schemas.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import type { UserType } from '$lib/schema.js';
+	import type { UserType, WorkspaceType } from '$lib/schema.js';
 
-	export let tableModel: TableViewModel<UserType>;
+	export let tableModel: TableViewModel<UserType | WorkspaceType>;
 	const { pluginStates, flatColumns } = tableModel;
 	const { hiddenColumnIds } = pluginStates.hide;
 

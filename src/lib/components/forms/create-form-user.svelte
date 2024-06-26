@@ -3,37 +3,47 @@
 	import { goto } from '$app/navigation';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { schemas, type WorkspaceType } from '$lib/schema';
-	import SuperDebug, { type SuperValidated, superForm } from 'sveltekit-superforms';
+	import { schemas, type UserType, type WorkspaceType } from '$lib/schema';
+	import SuperDebug, { type SuperForm, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Checkbox } from '../ui/checkbox';
 	import { z } from 'zod';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import type { AnyZodObject } from 'zod';
+	import WorkspacesFilter from './workspacesFilter.svelte';
 
+	type TableType = 'user' | 'workspace';
 	type PageType = 'create' | 'edit';
+	type FormType = UserType | WorkspaceType;
 	type Data = {
-		data: SuperValidated<z.infer<typeof schemas.User>>;
+		data: SuperValidated<FormType>;
 		type: PageType;
-		workspaces: WorkspaceType[];
-		destroy?: boolean;
+		workspaces?: WorkspaceType[];
+		tableType: TableType;
+	};
+	// Modify the isUser function to work with FormType
+	const isUser = (form: FormType): form is UserType => {
+		return 'email' in form;
 	};
 
-	let { data, type, workspaces, destroy }: Data = $props();
+	// Define a type for the superForm return type
+	type MySuperForm = SuperForm<FormType, AnyZodObject>;
 
-	let form = superForm(data, {
-		validators: zodClient(schemas.User),
+	let { data, type, workspaces, tableType = 'user' }: Data = $props();
+
+	let form: MySuperForm = superForm(data, {
+		validators: zodClient(isUser(data.data) ? schemas.User : schemas.Workspace),
 		dataType: 'json',
 		invalidateAll: 'force',
 		onResult: async (resultt) => {
 			const { result } = resultt;
-			console.log({ resultt });
-			console.log({ result });
 			if (result.status === 200) {
+				const path = isUser(result.data.form.data) ? 'users' : 'workspaces';
 				if (type === 'create') {
-					await goto(`/users/${result.data.form.message.id}`);
+					await goto(`/${path}/${result.data.form.data.id}`);
 				} else if (type === 'edit') {
-					await goto(`/users/${result.data.form.data.id}`);
+					await goto(`/${path}/${result.data.form.data.id}`);
 				}
 			}
 		}
@@ -41,81 +51,111 @@
 
 	const { form: formData, enhance, errors, message, submit } = form;
 
+	// Use the modified isUser function
 	function addItem(workspace: WorkspaceType) {
-		$formData.workspaces = $formData.workspaces
-			? [...$formData.workspaces, workspace]
-			: [workspace];
+		console.log('addItem', workspace);
+		if (isUser($formData)) {
+			console.log('isUser', $formData);
+			$formData.workspaces = $formData.workspaces
+				? [...$formData.workspaces, workspace]
+				: [workspace];
+		}
 	}
 
 	function removeItem(workspace: WorkspaceType) {
-		$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== workspace.id);
+		console.log('removeItem', workspace);
+		if (isUser($formData)) {
+			console.log('isUser', $formData);
+			$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== workspace.id);
+		}
+	}
+
+	type FormFieldProps<T extends FormType> = {
+		form: MySuperForm;
+		fieldName: keyof T;
+	};
+
+	function isValidFormField(name: string): name is keyof FormType {
+		return name in $formData;
 	}
 </script>
 
-<div class="stickied-debug">
-	<SuperDebug data={{ $formData, $errors }} display={dev} collapsible />
-</div>
-
-{#if $message}
-	<p>{$message}</p>
-{/if}
+{#snippet FormField({
+	form,
+	fieldName
+}: {
+	form: MySuperForm;
+	fieldName: keyof UserType | keyof WorkspaceType;
+})}
+	{#if isValidFormField(fieldName)}
+		<Form.Field {form} name={fieldName}>
+			<Form.Control let:attrs>
+				<Form.Label>{fieldName}</Form.Label>
+				<Input {...attrs} bind:value={$formData[fieldName]} />
+			</Form.Control>
+			<Form.Description>This is your public display {fieldName}.</Form.Description>
+			<Form.FieldErrors />
+		</Form.Field>
+	{/if}
+{/snippet}
 
 <form method="POST" use:enhance>
-	<Form.Field {form} name="name">
-		<Form.Control let:attrs>
-			<Form.Label>Name</Form.Label>
-			<Input {...attrs} bind:value={$formData.name} />
-		</Form.Control>
-		<Form.Description>This is your public display name.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
-	<Form.Field {form} name="email">
-		<Form.Control let:attrs>
-			<Form.Label>Email</Form.Label>
-			<Input {...attrs} bind:value={$formData.email} />
-		</Form.Control>
-		<Form.Description>This is your public display email.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
+	{@render FormField({ form, fieldName: 'name' })}
+	{@render FormField({ form, fieldName: 'email' })}
+
 	<Form.Field {form} name="workspaces">
 		<Form.Control let:attrs>
 			<Form.Label>Workspaces</Form.Label>
 			<div class="space-y-2">
-				{#each workspaces as workspace}
-					{@const checked = $formData?.workspaces?.some((w) => w.id === workspace.id)}
-					<div class="flex flex-row items-start space-x-3">
-						<Form.Control let:attrs>
-							<Checkbox
-								{...attrs}
-								checked={Boolean(checked)}
-								onCheckedChange={(v) => {
-									if (v) {
-										addItem(workspace);
-									} else {
-										removeItem(workspace);
-									}
-								}}
-							/>
-							<Form.Label class="font-normal">
-								{workspace.name}
-							</Form.Label>
-							<input
-								class="hidden"
-								type="checkbox"
-								name={attrs.name}
-								value={workspace.id}
-								{checked}
-							/>
-						</Form.Control>
-					</div>
-				{/each}
-				<Form.FieldErrors />
+				{#if workspaces}
+					{#if isUser($formData)}
+						<WorkspacesFilter
+							{workspaces}
+							selectedWorkspaces={$formData.workspaces}
+							{addItem}
+							{removeItem}
+						/>
+					{/if}
+				{/if}
+				<!-- {#if workspaces}
+					{#each workspaces as workspace}
+						{#if isUser($formData)}
+							{@const checked = $formData?.workspaces?.some((w) => w.id === workspace.id)}
+							<div class="flex flex-row items-start space-x-3">
+								<Form.Control let:attrs>
+									<Checkbox
+										{...attrs}
+										checked={Boolean(checked)}
+										onCheckedChange={(v) => {
+											if (v) {
+												addItem(workspace);
+											} else {
+												removeItem(workspace);
+											}
+										}}
+									/>
+									<Form.Label class="font-normal">
+										{workspace.name}
+									</Form.Label>
+									<input
+										class="hidden"
+										type="checkbox"
+										name={attrs.name}
+										value={workspace.id}
+										{checked}
+									/>
+								</Form.Control>
+							</div>
+						{/if}
+					{/each}
+				{/if}
+				<Form.FieldErrors /> -->
 			</div>
 		</Form.Control>
 		<Form.Description>These are your workspaces.</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<div class="flex flex-col items-center justify-center space-y-2">
+	<div class="flex items-center justify-between space-y-2">
 		<Form.Button>Submit</Form.Button>
 
 		<AlertDialog.Root>
