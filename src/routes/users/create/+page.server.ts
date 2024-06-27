@@ -15,12 +15,14 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod(schemas.User));
+		console.log('Inside default about to valiate');
 		if (!form.valid) {
 			console.log('Form is invalid', { form });
 			return fail(400, {
 				form
 			});
 		}
+		console.log('Form is valid', { form });
 
 		let user: User;
 		try {

@@ -5,7 +5,7 @@
 	const { data } = $props();
 </script>
 
-<div class="flex h-screen items-center justify-center">
+<div class="flex h-full items-center justify-center">
 	<Card.Root class="w-[380px] p-4">
 		<EditForm data={data.form} workspaces={data.workspaces} destroy type="edit" />
 	</Card.Root>

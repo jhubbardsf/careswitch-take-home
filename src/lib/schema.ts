@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const User = z.object({
 	id: z.number().int().positive().nullable(),
-	name: z.string(),
+	name: z.string().min(1),
 	email: z.string().email(),
 	avatar: z.string().url().nullish(),
 	workspaces: z

@@ -10,10 +10,10 @@
 	// let selectedWorkspaces: WorkspaceType[] = $state([]);
 
 	let {
-		workspaces = $bindable(),
+		workspaces,
 		removeItem,
 		addItem,
-		selectedWorkspaces
+		selectedWorkspaces = $bindable()
 	}: {
 		workspaces: WorkspaceType[];
 		removeItem: any;
@@ -21,17 +21,8 @@
 		selectedWorkspaces: WorkspaceType[];
 	} = $props();
 
-	let runOnce = false;
-	// $effect(() => {
-	// 	console.log('workspaces', workspaces);
-	// 	if (!runOnce) {
-	// 		selectedWorkspaces = workspaces;
-	// 		runOnce = true;
-	// 	}
-	// });
-
-	const filteredUsers = $derived(
-		workspaces.filter((workspace: WorkspaceType) =>
+	const filteredWorkspaces = $derived(
+		workspaces?.filter((workspace: WorkspaceType) =>
 			workspace.name.toLowerCase().includes(searchTerm.toLowerCase())
 		)
 	);
@@ -49,7 +40,7 @@
 		}
 	}
 
-	$inspect({ filteredUsers, selectedUsers: selectedWorkspaces });
+	$inspect({ filteredWorkspaces });
 </script>
 
 {#snippet CheckIcon(props)}
@@ -97,7 +88,7 @@
 		</div>
 		<div class="overflow-hidden rounded-lg border">
 			<ul class="max-h-40 divide-y overflow-y-auto">
-				{#each filteredUsers as user (user.id)}
+				{#each filteredWorkspaces as user (user.id)}
 					<li
 						class="flex cursor-pointer items-center justify-between px-4 py-3 hover:bg-muted {selectedWorkspaces.some(
 							(u) => u.id === user.id
@@ -122,9 +113,9 @@
 		</div>
 		{#if selectedWorkspaces.length > 0}
 			<div class="flex flex-wrap gap-2">
-				{#each selectedWorkspaces as user}
+				{#each selectedWorkspaces as workspace}
 					<Badge variant="outline">
-						{user.name}
+						{workspace.name}
 					</Badge>
 				{/each}
 			</div>

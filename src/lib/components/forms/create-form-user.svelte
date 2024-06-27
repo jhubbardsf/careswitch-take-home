@@ -33,15 +33,16 @@
 	let { data, type, workspaces, tableType = 'user' }: Data = $props();
 
 	let form: MySuperForm = superForm(data, {
-		validators: zodClient(isUser(data.data) ? schemas.User : schemas.Workspace),
+		validators: zodClient(tableType === 'user' ? schemas.User : schemas.Workspace),
 		dataType: 'json',
 		invalidateAll: 'force',
 		onResult: async (resultt) => {
 			const { result } = resultt;
+			console.log('create form result', { result, resultt });
 			if (result.status === 200) {
 				const path = isUser(result.data.form.data) ? 'users' : 'workspaces';
 				if (type === 'create') {
-					await goto(`/${path}/${result.data.form.data.id}`);
+					await goto(`/${path}/${result.data.form.message.id}`);
 				} else if (type === 'edit') {
 					await goto(`/${path}/${result.data.form.data.id}`);
 				}
@@ -50,6 +51,15 @@
 	});
 
 	const { form: formData, enhance, errors, message, submit } = form;
+
+	type FormFieldProps<T extends FormType> = {
+		form: MySuperForm;
+		fieldName: keyof T;
+	};
+
+	function isValidFormField(name: string): name is keyof FormType {
+		return name in $formData;
+	}
 
 	// Use the modified isUser function
 	function addItem(workspace: WorkspaceType) {
@@ -69,16 +79,13 @@
 			$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== workspace.id);
 		}
 	}
-
-	type FormFieldProps<T extends FormType> = {
-		form: MySuperForm;
-		fieldName: keyof T;
-	};
-
-	function isValidFormField(name: string): name is keyof FormType {
-		return name in $formData;
-	}
 </script>
+
+<div class="stickied-debug">
+	{#if isUser($formData)}
+		<SuperDebug data={{ $formData }} display={dev} collapsible />
+	{/if}
+</div>
 
 {#snippet FormField({
 	form,
