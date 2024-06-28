@@ -61,30 +61,11 @@
 				Workspaces
 			</a>
 		</nav>
-		<Sheet.Root>
-			<Sheet.Trigger asChild let:builder>
-				<Button variant="outline" size="icon" class="shrink-0 md:hidden" builders={[builder]}>
-					<Menu class="h-5 w-5" />
-					<span class="sr-only">Toggle navigation menu</span>
-				</Button>
-			</Sheet.Trigger>
-			<Sheet.Content side="left">
-				<nav class="grid gap-6 text-lg font-medium">
-					<a href="##" class="flex items-center gap-2 text-lg font-semibold">
-						<Package2 class="h-6 w-6" />
-						<span class="sr-only">Acme Inc</span>
-					</a>
-					<a href="##" class="text-muted-foreground hover:text-foreground"> Dashboard </a>
-					<a href="##" class="text-muted-foreground hover:text-foreground"> Orders </a>
-					<a href="##" class="text-muted-foreground hover:text-foreground"> Products </a>
-					<a href="##" class="text-muted-foreground hover:text-foreground"> Customers </a>
-					<a href="##" class="hover:text-foreground"> Settings </a>
-				</nav>
-			</Sheet.Content>
-		</Sheet.Root>
 	</header>
+	<!-- bg-muted/40 -->
 	<main
-		class="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10"
+		class="flex max-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4
+ bg-red-500 p-4 md:gap-8 md:p-10"
 	>
 		{@render children()}
 	</main>

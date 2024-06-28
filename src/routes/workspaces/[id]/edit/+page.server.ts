@@ -22,7 +22,7 @@ export const actions: Actions = {
 		let { cookies } = event;
 		const formData = await event.request.formData();
 
-		let form = await superValidate(formData, zod(schemas.User));
+		let form = await superValidate(formData, zod(schemas.Workspace));
 
 		// let formData = await event.request.formData();
 		console.log({ form, formData: JSON.stringify(formData, null, 2) });
@@ -35,32 +35,32 @@ export const actions: Actions = {
 
 		try {
 			console.log('Attempting to save user', { form });
-			let user = await prisma.user.findFirst({
+			let user = await prisma.workspace.findFirst({
 				where: { id: Number(form.data.id) },
-				include: { workspaces: true }
+				include: { users: true }
 			});
 			if (!user) error(404, 'User not found.');
 
 			// Check for delete
 			if (form.data.delete) {
 				console.log('deleting user');
-				await prisma.user.delete({
+				await prisma.workspace.delete({
 					where: { id: Number(form.data.id) }
 				});
 			} else {
 				console.log('no delete');
 
 				console.log({
-					workspaces: form.data.workspaces?.map((workspace) => ({ id: workspace.id }))
+					workspaces: form.data.users?.map((user) => ({ id: user.id }))
 				});
 
-				let updateUser = await prisma.user.update({
+				let updateUser = await prisma.workspace.update({
 					where: { id: Number(form.data.id) },
 					data: {
 						name: form.data.name,
-						email: form.data.email,
-						workspaces: {
-							set: form.data.workspaces?.map((workspace) => ({ id: workspace.id }))
+						description: form.data.description,
+						users: {
+							set: form.data.users?.map((user) => ({ id: user.id }))
 						}
 					}
 				});
@@ -69,9 +69,9 @@ export const actions: Actions = {
 			}
 		} catch (error) {
 			console.error({ error, 'error.message': (error as any).message });
-			return setError(form, 'email', 'E-mail already exists.');
+			return setError(form, 'name', 'Name already exists.');
 		}
 
-		redirect(303, '/users');
+		redirect(303, '/workspaces');
 	}
 };

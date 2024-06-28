@@ -19,12 +19,11 @@
 		DataTableButton,
 		DataTableActions,
 		DataTableToolbarWorkspace
-	} from './index.js';
-
+	} from './index';
 	import * as Table from '$lib/components/ui/table';
 	import type { WorkspaceType } from '$lib/schema';
 
-	export let data: WorkspaceType[];
+	const { data }: { data: WorkspaceType[] } = $props();
 
 	const table = createTable(readable(data), {
 		select: addSelectedRows(),

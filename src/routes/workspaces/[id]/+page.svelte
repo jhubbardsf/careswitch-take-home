@@ -4,25 +4,26 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 
 	let { data } = $props();
+	console.log('Workspaces read data: ', JSON.stringify(data, null, 2));
 </script>
 
 <div class="flex h-screen items-center justify-center">
 	<Card.Root class="  w-[380px]">
 		<Card.Header>
-			<Card.Title class="text-center">User Information</Card.Title>
+			<Card.Title class="text-center">Workspace Information</Card.Title>
 		</Card.Header>
 		<Card.Content class="grid gap-4">
 			<div>
 				<Card.Title>Name</Card.Title>
-				<Card.Description>{data.user?.name}</Card.Description>
+				<Card.Description>{data.workspace?.name}</Card.Description>
 			</div>
 			<div>
 				<Card.Title>Description</Card.Title>
-				<Card.Description>{data.user?.description}</Card.Description>
+				<Card.Description>{data.workspace?.description}</Card.Description>
 			</div>
-			{#if data.user?.users}
+			{#if data.workspace?.users}
 				<Card.Title>Users</Card.Title>
-				{#each data.user.users as user}
+				{#each data.workspace.users as user}
 					<Card.Description>
 						{user.name}
 					</Card.Description>

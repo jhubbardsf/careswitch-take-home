@@ -19,7 +19,16 @@
 		});
 	}
 
-	const hidableCols = ['id', 'name', 'email', 'avatar', 'workspaces', 'created_at', 'updated_at'];
+	const hidableCols = [
+		'id',
+		'name',
+		'email',
+		'description',
+		'avatar',
+		'workspaces',
+		'created_at',
+		'updated_at'
+	];
 </script>
 
 <DropdownMenu.Root>

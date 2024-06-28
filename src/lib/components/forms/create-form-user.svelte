@@ -109,13 +109,14 @@
 <form method="POST" use:enhance>
 	{@render FormField({ form, fieldName: 'name' })}
 	{@render FormField({ form, fieldName: 'email' })}
+	{@render FormField({ form, fieldName: 'description' })}
 
-	<Form.Field {form} name="workspaces">
-		<Form.Control let:attrs>
-			<Form.Label>Workspaces</Form.Label>
-			<div class="space-y-2">
-				{#if workspaces}
-					{#if isUser($formData)}
+	{#if isUser($formData)}
+		<Form.Field {form} name="workspaces">
+			<Form.Control let:attrs>
+				<Form.Label>Workspaces</Form.Label>
+				<div class="space-y-2">
+					{#if workspaces}
 						<WorkspacesFilter
 							{workspaces}
 							selectedWorkspaces={$formData.workspaces}
@@ -123,8 +124,7 @@
 							{removeItem}
 						/>
 					{/if}
-				{/if}
-				<!-- {#if workspaces}
+					<!-- {#if workspaces}
 					{#each workspaces as workspace}
 						{#if isUser($formData)}
 							{@const checked = $formData?.workspaces?.some((w) => w.id === workspace.id)}
@@ -157,11 +157,12 @@
 					{/each}
 				{/if}
 				<Form.FieldErrors /> -->
-			</div>
-		</Form.Control>
-		<Form.Description>These are your workspaces.</Form.Description>
-		<Form.FieldErrors />
-	</Form.Field>
+				</div>
+			</Form.Control>
+			<Form.Description>These are your workspaces.</Form.Description>
+			<Form.FieldErrors />
+		</Form.Field>
+	{/if}
 	<div class="flex items-center justify-between space-y-2">
 		<Form.Button>Submit</Form.Button>
 

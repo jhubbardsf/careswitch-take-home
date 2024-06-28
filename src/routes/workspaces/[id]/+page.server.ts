@@ -2,7 +2,7 @@ import { prisma } from '$lib/server/db';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
-	const user = await prisma.workspace.findFirst({
+	const workspace = await prisma.workspace.findFirst({
 		where: {
 			id: Number(params.id)
 		},
@@ -11,5 +11,5 @@ export const load: PageServerLoad = async ({ params }) => {
 		}
 	});
 
-	return { user };
+	return { workspace };
 };

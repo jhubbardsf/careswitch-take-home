@@ -8,8 +8,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import type { UserType, WorkspaceType } from '$lib/schema.js';
 
-	export let tableModel: TableViewModel<UserType | WorkspaceType>;
-	export let data: UserType[];
+	const { tableModel, data }: { tableModel: TableViewModel<Task>; data: Task[] } = $props();
 
 	const { pluginStates } = tableModel;
 	const {
@@ -27,7 +26,9 @@
 		}>;
 	} = pluginStates.colFilter;
 
-	$: showReset = Object.values({ ...$filterValues, $filterValue }).some((v) => v.length > 0);
+	let showReset = $derived(
+		Object.values({ ...$filterValues, $filterValue }).some((v) => v.length > 0)
+	);
 </script>
 
 <div class="flex items-center justify-between">
@@ -40,7 +41,7 @@
 				bind:value={$filterValue}
 			/>
 
-			<Button href="/users/create" variant="outline" size="sm">Create</Button>
+			<Button href="/workspaces/create" variant="outline" size="sm">Create</Button>
 		</div>
 
 		{#if showReset}
