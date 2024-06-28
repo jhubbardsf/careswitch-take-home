@@ -4,7 +4,7 @@
 	const { data } = $props();
 </script>
 
-<div class="flex h-full flex-col space-y-4">
+<div class="flex h-full flex-col space-y-4 p-8">
 	<div>
 		<h2 class="text-2xl font-bold tracking-tight">User List</h2>
 	</div>
