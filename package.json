@@ -5,13 +5,13 @@
 		"node": ">=18"
 	},
 	"scripts": {
-		"postinstall": "npx prisma migrate dev",
+		"postinstall": "bunx prisma migrate dev",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"seed": "node src/scripts/seed.js",
-		"migrate": "npx prisma migrate dev"
+		"seed": "bun src/scripts/seed.js",
+		"migrate": "bunx prisma migrate dev"
 	},
 	"devDependencies": {
 		"@internationalized/date": "^3.5.4",

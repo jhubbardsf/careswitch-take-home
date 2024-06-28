@@ -30,7 +30,7 @@ export const actions: Actions = {
 				data: {
 					name: form.data.name,
 					description: form.data.description,
-					avatar: `https://api.multiavatar.com/${crypto.randomUUID()}.svg`
+					avatar: `https://robohash.org/${crypto.randomUUID()}.png`
 				}
 			});
 

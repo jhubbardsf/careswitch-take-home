@@ -76,3 +76,8 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+body {
+	height: 100vh;
+	overflow: hidden;
+}
