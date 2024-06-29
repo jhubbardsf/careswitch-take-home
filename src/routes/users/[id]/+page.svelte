@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { Badge } from '$lib/components/ui/badge';
+
 	import * as Card from '$lib/components/ui/card/index.js';
 
 	let { data } = $props();
@@ -24,7 +26,9 @@
 				<Card.Title>Workspaces</Card.Title>
 				{#each data.user.workspaces as workspace}
 					<Card.Description>
-						{workspace.name}
+						<Badge variant="outline">
+							{workspace.name}
+						</Badge>
 					</Card.Description>
 				{/each}
 			{/if}

@@ -64,3 +64,36 @@ export async function getThisMonthsCounts() {
 
 	return { users: userCount, workspaces: workspaceCount };
 }
+
+export async function getUserWorkspaceStats() {
+	const now = new Date();
+	const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+	const stats = await prisma.$transaction(async (tx) => {
+		const totalUsers = await tx.user.count();
+		const totalWorkspaces = await tx.workspace.count();
+		const newUsers = await tx.user.count({
+			where: {
+				createdAt: {
+					gte: thirtyDaysAgo
+				}
+			}
+		});
+		const newWorkspaces = await tx.workspace.count({
+			where: {
+				createdAt: {
+					gte: thirtyDaysAgo
+				}
+			}
+		});
+
+		return {
+			totalUsers,
+			totalWorkspaces,
+			newUsers,
+			newWorkspaces
+		};
+	});
+
+	return stats;
+}

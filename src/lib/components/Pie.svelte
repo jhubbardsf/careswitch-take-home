@@ -24,7 +24,7 @@
 						position: 'top'
 					},
 					title: {
-						display: true,
+						display: false,
 						text: 'New Users and Workspaces in the Last Month'
 					}
 				}

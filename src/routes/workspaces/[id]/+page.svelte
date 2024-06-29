@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 
@@ -25,7 +26,9 @@
 				<Card.Title>Users</Card.Title>
 				{#each data.workspace.users as user}
 					<Card.Description>
-						{user.name}
+						<Badge variant="outline">
+							{user.name}
+						</Badge>
 					</Card.Description>
 				{/each}
 			{/if}
