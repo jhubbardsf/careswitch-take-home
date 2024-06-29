@@ -2,32 +2,29 @@
 	import Chart from 'chart.js/auto';
 	import { onMount } from 'svelte';
 
-	const data = [
-		{ year: 2010, acquisitions: 10, revenue: 100 },
-		{ year: 2011, acquisitions: 20, revenue: 120 },
-		{ year: 2012, acquisitions: 15, revenue: 150 },
-		{ year: 2013, acquisitions: 25, revenue: 180 },
-		{ year: 2014, acquisitions: 22, revenue: 200 },
-		{ year: 2015, acquisitions: 30, revenue: 220 },
-		{ year: 2016, acquisitions: 28, revenue: 250 }
-	];
+	export let data: Array<{
+		month: string;
+		userCount: number;
+		workspaceCount: number;
+	}>;
 
 	let chartCanvas: HTMLCanvasElement;
-	onMount(async () => {
+
+	onMount(() => {
 		new Chart(chartCanvas, {
 			type: 'line',
 			data: {
-				labels: data.map((row) => row.year),
+				labels: data.map((row) => row.month),
 				datasets: [
 					{
-						label: 'Acquisitions',
-						data: data.map((row) => row.acquisitions),
+						label: 'Users',
+						data: data.map((row) => row.userCount),
 						borderColor: 'rgb(75, 192, 192)',
 						tension: 0.1
 					},
 					{
-						label: 'Revenue (in millions)',
-						data: data.map((row) => row.revenue),
+						label: 'Workspaces',
+						data: data.map((row) => row.workspaceCount),
 						borderColor: 'rgb(255, 99, 132)',
 						tension: 0.1
 					}

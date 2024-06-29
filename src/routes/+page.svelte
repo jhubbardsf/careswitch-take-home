@@ -11,10 +11,10 @@
 		MoveHorizontal
 	} from 'lucide-svelte';
 	import Line from '$lib/components/Line.svelte';
+	import Pie from '$lib/components/Pie.svelte';
 
 	const { data } = $props();
-	const { results } = data;
-	console.log({ results });
+	console.log({ data });
 </script>
 
 <div class="flex h-full w-full flex-col gap-4 scroll-auto p-4 md:p-6 lg:p-8">
@@ -65,22 +65,25 @@
 	</div>
 
 	<div class="flex gap-4">
-		<Card class="flex flex-col">
+		<Card class="flex flex-1 flex-col">
 			<CardHeader class="flex flex-row items-center justify-between pb-2">
 				<CardTitle class="text-sm font-medium">Users to Workspaces Ratio</CardTitle>
 				<PieChart class="h-4 w-4 text-muted-foreground" />
 			</CardHeader>
 			<CardContent class="flex flex-grow items-center justify-center">
 				<div class="flex h-full flex-col items-center justify-center">
-					<div class="text-4xl font-bold">Ratio Chart</div>
+					<Pie users={data.users} workspaces={data.workspaces} />
+					<!-- <div class="text-4xl font-bold">Ratio Chart</div> -->
 				</div>
 			</CardContent>
 		</Card>
 
 		<Card class="flex flex-col place-self-stretch">
-			<CardHeader class="flex flex-row items-center justify-between pb-2">
-				<CardTitle class="text-sm font-medium">Users to Workspaces Ratio</CardTitle>
-				<Line />
+			<CardHeader class="flex flex-col items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">Users and Workspaces Added Per Month</CardTitle>
+				{#if data.userWorkspaceAddedPerMonth}
+					<Line data={data.userWorkspaceAddedPerMonth} />
+				{/if}
 			</CardHeader>
 		</Card>
 	</div>
