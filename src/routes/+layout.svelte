@@ -3,7 +3,10 @@
 	import '../app.css';
 	import { flashMessage } from '$lib/flashMessage.svelte';
 	import Header from '$lib/components/Header.svelte';
+
 	let { children } = $props();
+
+	console.log('Test');
 </script>
 
 <ModeWatcher />
@@ -14,10 +17,9 @@
 	</div>
 {/if}
 
-<div class="flex h-screen w-full flex-col overflow-hidden bg-green-600">
+<div class="flex h-screen w-full flex-col overflow-hidden">
 	<Header />
-	<!-- bg-muted/40 -->
-	<main class="flex-1 overflow-hidden bg-red-500">
+	<main class="flex-1 overflow-hidden bg-muted/40">
 		{@render children()}
 	</main>
 </div>

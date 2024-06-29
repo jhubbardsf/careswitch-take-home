@@ -1,75 +1,87 @@
-<script lang="ts">
-	import CircleUser from 'lucide-svelte/icons/circle-user';
-	import Menu from 'lucide-svelte/icons/menu';
-	import Package2 from 'lucide-svelte/icons/package-2';
-	import Search from 'lucide-svelte/icons/search';
+<script>
+	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import { Checkbox } from '$lib/components/ui/checkbox/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import * as Sheet from '$lib/components/ui/sheet/index.js';
-	import { cn } from '$lib/utils';
-	import { page } from '$app/stores';
+	import {
+		LayoutGrid,
+		Users,
+		UserPlus,
+		FolderPlus,
+		PieChart,
+		LineChart,
+		MoveHorizontal
+	} from 'lucide-svelte';
+	import Line from '$lib/components/Line.svelte';
+
+	const { data } = $props();
+	const { results } = data;
+	console.log({ results });
 </script>
 
-<div class="mx-auto grid w-full max-w-6xl gap-2">
-	<h1 class="text-3xl font-semibold">Settings</h1>
-</div>
-<div
-	class="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]"
->
-	<nav
-		class="grid gap-4 text-sm text-muted-foreground"
-		data-x-chunk-container="chunk-container after:right-0"
-	>
-		<a href="##" class="font-semibold text-primary"> General </a>
-		<a href="##">Security</a>
-		<a href="##">Integrations</a>
-		<a href="##">Support</a>
-		<a href="##">Organizations</a>
-		<a href="##">Advanced</a>
-	</nav>
-	<div class="grid gap-6">
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Store Name</Card.Title>
-				<Card.Description>Used to identify your store in the marketplace.</Card.Description>
-			</Card.Header>
-			<Card.Content>
-				<form>
-					<Input placeholder="Store Name" />
-				</form>
-			</Card.Content>
-			<Card.Footer class="border-t px-6 py-4">
-				<Button>Save</Button>
-			</Card.Footer>
-		</Card.Root>
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Plugins Directory</Card.Title>
-				<Card.Description>
-					The directory within your project, in which your plugins are located.
-				</Card.Description>
-			</Card.Header>
-			<Card.Content>
-				<form class="flex flex-col gap-4">
-					<Input placeholder="Project Name" value="/content/plugins" />
-					<div class="flex items-center space-x-2">
-						<Checkbox id="include" checked={true} />
-						<label
-							for="include"
-							class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							Allow administrators to change the directory.
-						</label>
-					</div>
-				</form>
-			</Card.Content>
-			<Card.Footer class="border-t px-6 py-4">
-				<Button>Save</Button>
-			</Card.Footer>
-		</Card.Root>
+<div class="flex h-full w-full flex-col gap-4 scroll-auto p-4 md:p-6 lg:p-8">
+	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		<Card>
+			<CardHeader class="flex flex-row items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">Total Users</CardTitle>
+				<Users class="h-4 w-4 text-muted-foreground" />
+			</CardHeader>
+			<CardContent>
+				<div class="text-2xl font-bold">2,350</div>
+				<p class="text-xs text-muted-foreground">+5.2% from last week</p>
+			</CardContent>
+		</Card>
+
+		<Card>
+			<CardHeader class="flex flex-row items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">Total Workspaces</CardTitle>
+				<LayoutGrid class="h-4 w-4 text-muted-foreground" />
+			</CardHeader>
+			<CardContent>
+				<div class="text-2xl font-bold">145</div>
+				<p class="text-xs text-muted-foreground">+3.1% from last week</p>
+			</CardContent>
+		</Card>
+
+		<Card>
+			<CardHeader class="flex flex-row items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">New Users (30 days)</CardTitle>
+				<UserPlus class="h-4 w-4 text-muted-foreground" />
+			</CardHeader>
+			<CardContent>
+				<div class="text-2xl font-bold">+325</div>
+				<p class="text-xs text-muted-foreground">+12% from last period</p>
+			</CardContent>
+		</Card>
+
+		<Card>
+			<CardHeader class="flex flex-row items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">New Workspaces (30 days)</CardTitle>
+				<FolderPlus class="h-4 w-4 text-muted-foreground" />
+			</CardHeader>
+			<CardContent>
+				<div class="text-2xl font-bold">+18</div>
+				<p class="text-xs text-muted-foreground">+8% from last period</p>
+			</CardContent>
+		</Card>
+	</div>
+
+	<div class="flex gap-4">
+		<Card class="flex flex-col">
+			<CardHeader class="flex flex-row items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">Users to Workspaces Ratio</CardTitle>
+				<PieChart class="h-4 w-4 text-muted-foreground" />
+			</CardHeader>
+			<CardContent class="flex flex-grow items-center justify-center">
+				<div class="flex h-full flex-col items-center justify-center">
+					<div class="text-4xl font-bold">Ratio Chart</div>
+				</div>
+			</CardContent>
+		</Card>
+
+		<Card class="flex flex-col place-self-stretch">
+			<CardHeader class="flex flex-row items-center justify-between pb-2">
+				<CardTitle class="text-sm font-medium">Users to Workspaces Ratio</CardTitle>
+				<Line />
+			</CardHeader>
+		</Card>
 	</div>
 </div>
