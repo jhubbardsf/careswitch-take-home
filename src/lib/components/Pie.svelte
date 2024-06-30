@@ -33,6 +33,6 @@
 	});
 </script>
 
-<div style="width: 400px; height: 400px;">
+<div class="h-full w-full">
 	<canvas bind:this={chartCanvas} id="pieChartCanvas"></canvas>
 </div>
