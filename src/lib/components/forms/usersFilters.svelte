@@ -3,44 +3,45 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Badge } from '$lib/components/ui/badge';
-	import { SearchIcon } from 'lucide-svelte';
 	import type { WorkspaceType } from '$lib/schema';
 
 	let searchTerm: string = $state('');
-	// let selectedWorkspaces: WorkspaceType[] = $state([]);
 
 	let {
-		workspaces,
+		users,
 		removeItem,
 		addItem,
-		selectedWorkspaces = $bindable()
+		selectedUsers = $bindable()
 	}: {
-		workspaces: WorkspaceType[];
+		users: WorkspaceType[];
 		removeItem: any;
 		addItem: any;
-		selectedWorkspaces: WorkspaceType[];
+		selectedUsers: WorkspaceType[];
 	} = $props();
 
-	const filteredWorkspaces = $derived(
-		workspaces?.filter((workspace: WorkspaceType) =>
+	const filteredUsers = $derived(
+		users?.filter((workspace: WorkspaceType) =>
 			workspace.name.toLowerCase().includes(searchTerm.toLowerCase())
 		)
 	);
 
-	function handleWorkspaceSelect(workspace: WorkspaceType) {
+	function handleUserSelect(workspace: WorkspaceType) {
 		console.log('handleUserSelect');
-		if (selectedWorkspaces.some((u) => u.id === workspace.id)) {
-			console.log('removing workspace');
+		if (selectedUsers.some((u) => u.id === workspace.id)) {
+			console.log('removing user');
 			removeItem(workspace);
-			selectedWorkspaces = selectedWorkspaces?.filter((u) => u.id !== workspace.id);
+			selectedUsers = selectedUsers?.filter((u) => u.id !== workspace.id);
 		} else {
-			console.log('adding workspace');
+			console.log('adding user');
 			addItem(workspace);
-			selectedWorkspaces = [...selectedWorkspaces, workspace];
+			selectedUsers = [...selectedUsers, workspace];
 		}
 	}
 
-	$inspect({ filteredWorkspaces });
+	$effect(() => {
+		console.log('jsh users: ', { filteredUsers });
+	});
+	$inspect({ filteredWorkspaces: filteredUsers });
 </script>
 
 {#snippet CheckIcon(props)}
@@ -88,14 +89,14 @@
 		</div>
 		<div class="overflow-hidden rounded-lg border">
 			<ul class="max-h-40 divide-y overflow-y-auto">
-				{#each filteredWorkspaces as user (user.id)}
+				{#each filteredUsers as user (user.id)}
 					<li
-						class="flex cursor-pointer items-center justify-between px-4 py-3 hover:bg-muted {selectedWorkspaces.some(
+						class="flex cursor-pointer items-center justify-between px-4 py-3 hover:bg-muted {selectedUsers.some(
 							(u) => u.id === user.id
 						)
 							? 'bg-primary text-primary-foreground'
 							: ''}"
-						onclick={() => handleWorkspaceSelect(user)}
+						onclick={() => handleUserSelect(user)}
 					>
 						<div class="flex items-center gap-3">
 							<Avatar.Root>
@@ -104,16 +105,16 @@
 							</Avatar.Root>
 							<span>{user.name}</span>
 						</div>
-						{#if selectedWorkspaces.some((u) => u.id === user.id)}
+						{#if selectedUsers.some((u) => u.id === user.id)}
 							{@render CheckIcon({ class: 'h-5 w-5' })}
 						{/if}
 					</li>
 				{/each}
 			</ul>
 		</div>
-		{#if selectedWorkspaces.length > 0}
+		{#if selectedUsers.length > 0}
 			<div class="flex flex-wrap gap-2">
-				{#each selectedWorkspaces as workspace}
+				{#each selectedUsers as workspace}
 					<Badge variant="outline">
 						{workspace.name}
 					</Badge>

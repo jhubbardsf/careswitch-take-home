@@ -10,9 +10,10 @@ export const load: PageServerLoad = async ({ params: { id }, parent }) => {
 		where: { id: Number(id) },
 		include: { users: true }
 	});
+	const form = await superValidate(workspace, zod(schemas.Workspace));
 
 	return {
-		form: await superValidate(workspace, zod(schemas.Workspace)),
+		form,
 		users: await prisma.user.findMany()
 	};
 };

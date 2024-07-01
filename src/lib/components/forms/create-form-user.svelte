@@ -12,6 +12,8 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import type { AnyZodObject } from 'zod';
 	import WorkspacesFilter from './workspacesFilter.svelte';
+	import UsersFilters from './usersFilters.svelte';
+	import { page } from '$app/stores';
 
 	type TableType = 'user' | 'workspace';
 	type PageType = 'create' | 'edit';
@@ -20,27 +22,26 @@
 		data: SuperValidated<FormType>;
 		type: PageType;
 		workspaces?: WorkspaceType[];
+		users?: UserType[];
 		tableType: TableType;
-	};
-	// Modify the isUser function to work with FormType
-	const isUser = (form: FormType): form is UserType => {
-		return 'email' in form;
 	};
 
 	// Define a type for the superForm return type
 	type MySuperForm = SuperForm<FormType, AnyZodObject>;
 
-	let { data, type, workspaces, tableType = 'user' }: Data = $props();
+	let { data, type, workspaces, users, tableType = 'user' }: Data = $props();
 
+	function isUserForm(form: FormType): form is UserType {
+		return 'workspaces' in form;
+	}
 	let form: MySuperForm = superForm(data, {
 		validators: zodClient(tableType === 'user' ? schemas.User : schemas.Workspace),
 		dataType: 'json',
 		invalidateAll: 'force',
-		onResult: async (resultt) => {
-			const { result } = resultt;
-			console.log('create form result', { result, resultt });
+		onResult: async ({ result }) => {
+			console.log('create form result', { result });
 			if (result.status === 200) {
-				const path = isUser(result.data.form.data) ? 'users' : 'workspaces';
+				const path = isUserForm($formData) ? 'users' : 'workspaces';
 				if (type === 'create') {
 					await goto(`/${path}/${result.data.form.message.id}`);
 				} else if (type === 'edit') {
@@ -52,37 +53,49 @@
 
 	const { form: formData, enhance, errors, message, submit } = form;
 
-	type FormFieldProps<T extends FormType> = {
-		form: MySuperForm;
-		fieldName: keyof T;
-	};
-
 	function isValidFormField(name: string): name is keyof FormType {
 		return name in $formData;
 	}
 
 	// Use the modified isUser function
-	function addItem(workspace: WorkspaceType) {
-		console.log('addItem', workspace);
-		if (isUser($formData)) {
-			console.log('isUser', $formData);
-			$formData.workspaces = $formData.workspaces
-				? [...$formData.workspaces, workspace]
-				: [workspace];
+	function addItem(workspaceOrUser: WorkspaceType | UserType) {
+		if (isUserPage) {
+			if (isUserForm($formData)) {
+				$formData.workspaces = $formData.workspaces
+					? [...$formData.workspaces, workspaceOrUser as WorkspaceType]
+					: [workspaceOrUser as WorkspaceType];
+			}
+		} else {
+			if ('users' in $formData) {
+				$formData.users = $formData.users
+					? [...$formData.users, workspaceOrUser as UserType]
+					: [workspaceOrUser as UserType];
+			}
 		}
 	}
 
-	function removeItem(workspace: WorkspaceType) {
-		console.log('removeItem', workspace);
-		if (isUser($formData)) {
-			console.log('isUser', $formData);
-			$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== workspace.id);
+	function removeItem(workspaceOrUser: WorkspaceType | UserType) {
+		console.log('jsh removeItem (remoteItem)', workspaceOrUser);
+		if (isUserForm($formData)) {
+			// Add/remove workspaces from workspaces
+			console.log('jsh isUser (remove)', $formData);
+			$formData.workspaces = $formData.workspaces?.filter((i) => i.id !== workspaceOrUser.id);
+		} else {
+			// Add/remove workspaces from workspaces
+			if ('users' in $formData) {
+				console.log('jsh isWorkspace (remove)', $formData);
+				$formData.users = $formData.users?.filter((i) => i.id !== workspaceOrUser.id);
+			}
 		}
 	}
+
+	$effect(() => {
+		console.log('jsh $formData: ', { $formData, workspaces, users });
+	});
 </script>
 
 <div class="stickied-debug">
-	{#if isUser($formData)}
+	{#if isUserForm($formData)}
 		<SuperDebug data={{ $formData }} display={dev} collapsible />
 	{/if}
 </div>
@@ -111,7 +124,7 @@
 	{@render FormField({ form, fieldName: 'email' })}
 	{@render FormField({ form, fieldName: 'description' })}
 
-	{#if isUser($formData)}
+	{#if isUserForm($formData)}
 		<Form.Field {form} name="workspaces">
 			<Form.Control let:attrs>
 				<Form.Label>Workspaces</Form.Label>
@@ -124,42 +137,22 @@
 							{removeItem}
 						/>
 					{/if}
-					<!-- {#if workspaces}
-					{#each workspaces as workspace}
-						{#if isUser($formData)}
-							{@const checked = $formData?.workspaces?.some((w) => w.id === workspace.id)}
-							<div class="flex flex-row items-start space-x-3">
-								<Form.Control let:attrs>
-									<Checkbox
-										{...attrs}
-										checked={Boolean(checked)}
-										onCheckedChange={(v) => {
-											if (v) {
-												addItem(workspace);
-											} else {
-												removeItem(workspace);
-											}
-										}}
-									/>
-									<Form.Label class="font-normal">
-										{workspace.name}
-									</Form.Label>
-									<input
-										class="hidden"
-										type="checkbox"
-										name={attrs.name}
-										value={workspace.id}
-										{checked}
-									/>
-								</Form.Control>
-							</div>
-						{/if}
-					{/each}
-				{/if}
-				<Form.FieldErrors /> -->
 				</div>
 			</Form.Control>
-			<Form.Description>These are your workspaces.</Form.Description>
+			<Form.Description>Select workspaces</Form.Description>
+			<Form.FieldErrors />
+		</Form.Field>
+	{:else}
+		<Form.Field {form} name="users">
+			<Form.Control let:attrs>
+				<Form.Label>Users</Form.Label>
+				<div class="space-y-2">
+					{#if users}
+						<UsersFilters {users} selectedUsers={$formData.users} {addItem} {removeItem} />
+					{/if}
+				</div>
+			</Form.Control>
+			<Form.Description>Select users.</Form.Description>
 			<Form.FieldErrors />
 		</Form.Field>
 	{/if}

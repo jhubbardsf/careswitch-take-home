@@ -3,11 +3,9 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Badge } from '$lib/components/ui/badge';
-	import { SearchIcon } from 'lucide-svelte';
 	import type { WorkspaceType } from '$lib/schema';
 
 	let searchTerm: string = $state('');
-	// let selectedWorkspaces: WorkspaceType[] = $state([]);
 
 	let {
 		workspaces,
