@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "npx",
+			"args": ["prisma", "studio"],
+			"problemMatcher": [],
+			"label": "Run Prisma Studio (npx)",
+			"detail": "Runs Prisma Studio using npx"
+		}
+	]
+}

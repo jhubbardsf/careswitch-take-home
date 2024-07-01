@@ -8,6 +8,21 @@ generator client {
 }
 
 model User {
-  id   String @id @default(cuid())
-  name String
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  avatar     String
+  workspaces Workspace[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Workspace {
+  id          Int      @id @default(autoincrement())
+  name        String
+  users       User[]
+  avatar      String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
